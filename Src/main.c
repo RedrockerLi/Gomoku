@@ -5,6 +5,8 @@
 #include "game.h"
 
 int main(){
-    drawTheStartPage();
+    chessboard_init();
+    draw_the_start_page();
+    get_game_mode();
     return 0;
 }
