@@ -1,5 +1,6 @@
 #ifndef _CHESSBOARD_H
 #define _CHESSBOARD_H
+#include <stdint.h>
 
 #define RANGE_OF_CHESSBOARD 19
 
@@ -9,7 +10,7 @@ enum STATE_OF_CHESSBOARD_E{
     WHITE
 };
 
-extern int8_t stateOfChessboard[RANGE_OF_CHESSBOARD][RANGE_OF_CHESSBOARD];
 
 void chessboard_init(void);
+void draw_the_chessboard(void);
 #endif

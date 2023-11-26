@@ -7,6 +7,7 @@
 int main(){
     chessboard_init();
     draw_the_start_page();
-    get_game_mode();
+    input_game_mode();
+    draw_the_chessboard();
     return 0;
 }

@@ -6,6 +6,6 @@ if [ ! -d "/Build/" ];then
 fi
 cd Build
 cmake ..
-make
+make -j4
 cd ../Bin
 ./main

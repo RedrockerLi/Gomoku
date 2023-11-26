@@ -2,8 +2,16 @@
 #include <stdint.h>
 
 #include "game.h"
+#include "chessboard.h"
 
 static uint8_t game_mode;
+
+/**
+ * @brief 比赛初始化
+*/
+void game_init(void){
+    chessboard_init();
+}
 
 //             .-'''-.                        .-'''-.                             //
 //            '   _    \                     '   _    \                           //
@@ -20,6 +28,10 @@ static uint8_t game_mode;
 //   `'---'                                             '------'  '---'`-'  `--'  //
 // Choose game mode:                                                              //
 //      A:Person VS Person  B:Person VS Computer  C:Computer VS Person            //
+
+/**
+ * @brief 绘制首页
+*/
 void draw_the_start_page(void){
     printf("             .-'''-.                        .-'''-.                             \n");
     printf("            '   _    \\                     '   _    \\                           \n");
@@ -32,13 +44,13 @@ void draw_the_start_page(void){
     printf("  \\ '---..              |  |  |  |  |  |               |   |/  .     .' | .' |  \n");
     printf("   /'""'.  \\\\             |__|  |__|  |__|               |    /\\  \\    /  | /  |  \n");
     printf("  ||     ||                                            |   |  \\  \\  |   `'.  |  \n");
-    printf("  \\\'. __//                                             '    \\  \\  \\ '   .'|  '/ \n");
+    printf("  \\'. __//                                             '    \\  \\  \\ '   .'|  '/ \n");
     printf("   `'---'                                             '------'  '---'`-'  `--'  \n");
     printf(" Choose game mode:                                                              \n");
     printf("      A:Person VS Person  B:Person VS Computer  C:Computer VS Person            \n");
 }
 
-void get_game_mode(void){
+void input_game_mode(void){
     uint8_t i;
     scanf("%c",&i);
     switch(i)
@@ -53,12 +65,9 @@ void get_game_mode(void){
         game_mode=COMPUTER_VS_PERSON;
         break;
     default:
-        get_game_mode();
+        printf("Please choose the right game mode:\n");
+        input_game_mode();
         break;
     }
 }
 
-void draw_the_chessboard(int8_t board[][]){
-    int8_t i,j;
-    for(i=0,)
-}
