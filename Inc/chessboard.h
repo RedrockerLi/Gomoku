@@ -10,7 +10,10 @@ enum STATE_OF_CHESSBOARD_E{
     WHITE
 };
 
+void chessboard_init(int8_t *stateOfChessboard);
 
-void chessboard_init(void);
-void draw_the_chessboard(void);
+#ifndef GAME
+const int8_t * get_state_of_chessboard_point();
+#endif
+
 #endif

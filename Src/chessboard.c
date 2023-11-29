@@ -2,52 +2,29 @@
 #include <stdio.h>
 
 #include "chessboard.h"
+#include "AI.h"
 
-static int8_t stateOfChessboard[RANGE_OF_CHESSBOARD][RANGE_OF_CHESSBOARD];
+#ifdef GAME
+static int8_t stateOfChessboard[RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD];
+
+/**
+ * @brief 提供只读的接口
+*/
+const int8_t * get_state_of_chessboard_point(){
+    return &stateOfChessboard;
+}
+#endif
 
 /**
  * @brief 初始化棋盘状态
 */
-void chessboard_init(void){
+void chessboard_init(int8_t *stateOfChessboard){
     int8_t i,j;
     for(i=0;i<RANGE_OF_CHESSBOARD;i++){
         for(j=0;j<RANGE_OF_CHESSBOARD;j++){
-            stateOfChessboard[i][j]=0;
+            stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]=0;
         }
     }
 }
 
 
-void draw_the_chessboard(void){
-    int8_t i,j;
-    for(j=0;j<RANGE_OF_CHESSBOARD;j++){
-        for(i=0;i<RANGE_OF_CHESSBOARD;i++){
-            if(i<RANGE_OF_CHESSBOARD-1){
-                if(stateOfChessboard[i][j]==BLACK){
-                    printf("*--");
-                }else if(stateOfChessboard[i][j]==NONE){
-                    printf(" --");
-                }else if(stateOfChessboard[i][j]==WHITE){
-                    printf("#--");
-                }
-            }else{
-                if(stateOfChessboard[i][j]==BLACK){
-                    printf("*\n");
-                }else if(stateOfChessboard[i][j]==NONE){
-                    printf(" \n");
-                }else if(stateOfChessboard[i][j]==WHITE){
-                    printf("#\n");
-                }
-            }
-        }
-        if(j<RANGE_OF_CHESSBOARD-1){
-            for(i=0;i<RANGE_OF_CHESSBOARD;i++){
-                if(i<RANGE_OF_CHESSBOARD-1){
-                    printf("|  ");
-                }else{
-                    printf("|\n");
-                }
-            }
-        }
-    }
-}

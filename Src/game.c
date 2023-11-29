@@ -3,14 +3,18 @@
 
 #include "game.h"
 #include "chessboard.h"
+#include "AI.h"
 
+#ifdef GAME
 static uint8_t game_mode;
+const int8_t *stateOfChessboard_p;
 
 /**
  * @brief 比赛初始化
 */
 void game_init(void){
-    chessboard_init();
+    stateOfChessboard_p=get_state_of_chessboard_point();
+    chessboard_init(stateOfChessboard_p);
 }
 
 //             .-'''-.                        .-'''-.                             //
@@ -50,6 +54,9 @@ void draw_the_start_page(void){
     printf("      A:Person VS Person  B:Person VS Computer  C:Computer VS Person            \n");
 }
 
+/**
+ * @brief 输入比赛模式
+*/
 void input_game_mode(void){
     uint8_t i;
     scanf("%c",&i);
@@ -71,3 +78,40 @@ void input_game_mode(void){
     }
 }
 
+/**
+ * @brief 绘制棋盘
+*/
+void draw_the_chessboard(const int8_t *stateOfChessboard){
+    int8_t i,j;
+    for(j=0;j<RANGE_OF_CHESSBOARD;j++){
+        for(i=0;i<RANGE_OF_CHESSBOARD;i++){
+            if(i<RANGE_OF_CHESSBOARD-1){
+                if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==BLACK){
+                    printf("*--");
+                }else if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==NONE){
+                    printf(" --");
+                }else if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==WHITE){
+                    printf("#--");
+                }
+            }else{
+                if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==BLACK){
+                    printf("*\n");
+                }else if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==NONE){
+                    printf(" \n");
+                }else if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==WHITE){
+                    printf("#\n");
+                }
+            }
+        }
+        if(j<RANGE_OF_CHESSBOARD-1){
+            for(i=0;i<RANGE_OF_CHESSBOARD;i++){
+                if(i<RANGE_OF_CHESSBOARD-1){
+                    printf("|  ");
+                }else{
+                    printf("|\n");
+                }
+            }
+        }
+    }
+}
+#endif
