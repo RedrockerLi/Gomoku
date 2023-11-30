@@ -3,13 +3,20 @@
 
 #include <stdint.h>
 
-#include "chessboard.h"
 #include "AI.h"
+
+#define RANGE_OF_CHESSBOARD 19
 
 enum GAME_MODE{
     PERSON_VS_PERSON=0,
     PERSON_VS_COMPUTER,
     COMPUTER_VS_PERSON
+};
+
+enum STATE_OF_CHESSBOARD_E{
+    BLACK=-1,
+    NONE,
+    WHITE
 };
 
 #ifdef TRAIN
@@ -20,11 +27,14 @@ typedef struct
 }ONE_GAME_t;
 #endif
 
+
+
+const int8_t * get_state_of_chessboard_point();
+
 #ifdef GAME
-extern const int8_t *stateOfChessboard_p;
-void game_init(void);
 void draw_the_start_page(void);
 void input_game_mode(void);
+void draw_the_chessboard(void);
 #endif
-void draw_the_chessboard(const int8_t *stateOfChessboard);
+
 #endif

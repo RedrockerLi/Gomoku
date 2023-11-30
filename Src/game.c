@@ -2,20 +2,11 @@
 #include <stdint.h>
 
 #include "game.h"
-#include "chessboard.h"
 #include "AI.h"
 
 #ifdef GAME
+static int8_t stateOfChessboard[RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD]={0};
 static uint8_t game_mode;
-const int8_t *stateOfChessboard_p;
-
-/**
- * @brief 比赛初始化
-*/
-void game_init(void){
-    stateOfChessboard_p=get_state_of_chessboard_point();
-    chessboard_init(stateOfChessboard_p);
-}
 
 //             .-'''-.                        .-'''-.                             //
 //            '   _    \                     '   _    \                           //
@@ -73,6 +64,7 @@ void input_game_mode(void){
         break;
     default:
         printf("Please choose the right game mode:\n");
+        while((i = getchar()) != '\n' && i != EOF);
         input_game_mode();
         break;
     }
@@ -81,17 +73,17 @@ void input_game_mode(void){
 /**
  * @brief 绘制棋盘
 */
-void draw_the_chessboard(const int8_t *stateOfChessboard){
+void draw_the_chessboard(void){
     int8_t i,j;
     for(j=0;j<RANGE_OF_CHESSBOARD;j++){
         for(i=0;i<RANGE_OF_CHESSBOARD;i++){
             if(i<RANGE_OF_CHESSBOARD-1){
                 if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==BLACK){
-                    printf("*--");
+                    printf("*——");
                 }else if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==NONE){
-                    printf(" --");
+                    printf(" ——");
                 }else if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==WHITE){
-                    printf("#--");
+                    printf("#——");
                 }
             }else{
                 if(stateOfChessboard[i*RANGE_OF_CHESSBOARD+j]==BLACK){
@@ -114,4 +106,12 @@ void draw_the_chessboard(const int8_t *stateOfChessboard){
         }
     }
 }
+
+/**
+ * @brief 提供只读的接口
+*/
+const int8_t * get_state_of_chessboard_point(){
+    return (const int8_t *)&stateOfChessboard;
+}
+
 #endif

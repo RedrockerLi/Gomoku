@@ -7,8 +7,6 @@ include_directories(${PROJECT_SOURCE_DIR}/Inc)
 aux_source_directory(${PROJECT_SOURCE_DIR}/Src SRC_LIST)
 add_executable(main ${SRC_LIST})
 
-set(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/Bin)
-
 set(CMAKE_BUILD_TYPE Debug)
 # set(CMAKE_BUILD_TYPE Release)
 set(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
