@@ -7,6 +7,8 @@
 #ifdef GAME
 static int8_t stateOfChessboard[RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD]={0};
 static uint8_t game_mode;
+static INPUT_CHESS_PLACE_t blackInputChessPlace;
+static INPUT_CHESS_PLACE_t whiteInputChessPlace;
 
 //             .-'''-.                        .-'''-.                             //
 //            '   _    \                     '   _    \                           //
@@ -108,9 +110,35 @@ void draw_the_chessboard(void){
 }
 
 /**
+ * @brief 落子输入,格式：x y（数字）
+*/
+void input_chess_place(void){
+
+}
+
+/**
+ * @brief 棋盘落子
+*/
+void place_the_chess(void){
+
+}
+
+/**
+ * @brief 判断胜负
+*/
+
+
+/** 
+ * @brief 继续一个回合
+*/
+void continue_a_round(void){
+    
+}
+
+/**
  * @brief 提供只读的接口
 */
-const int8_t * get_state_of_chessboard_point(){
+const int8_t * get_state_of_chessboard_point(void){
     return (const int8_t *)&stateOfChessboard;
 }
 
