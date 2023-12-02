@@ -392,6 +392,7 @@ void continue_the_game(void){
         while (gameWinner==CONTINUE){
             input_chess_place();
             place_the_chess();
+            draw_the_chessboard();
             gameWinner=call_the_game();
             if(gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
@@ -410,6 +411,7 @@ void continue_the_game(void){
         while (gameWinner==CONTINUE){
             input_chess_place();
             place_the_chess();
+            draw_the_chessboard();
             gameWinner=call_the_game();
             if(gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
