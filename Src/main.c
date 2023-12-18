@@ -5,11 +5,12 @@
 
 int main(){
     #ifdef GAME
-    gameInit();
-    draw_the_start_page();
-    input_game_mode();
-    draw_the_chessboard();
-    continue_the_game();
+    ONE_GAME_t classGame_t;
+    gameInit(&classGame_t);
+    draw_the_start_page(&classGame_t);
+    input_game_mode(&classGame_t);
+    draw_the_chessboard(&classGame_t);
+    continue_the_game(&classGame_t);
     #endif
     return 0;
 }
