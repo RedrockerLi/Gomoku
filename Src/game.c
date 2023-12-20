@@ -61,6 +61,7 @@ void gameInit(ONE_GAME_t *nowGame_t){
  * @brief 绘制首页
 */
 void draw_the_start_page(void){
+    system("clear");
     printf("             .-'''-.                        .-'''-.                             \n");
     printf("            '   _    \\                     '   _    \\                           \n");
     printf("          /   /` '.   \\  __  __   ___    /   /` '.   \\     .                    \n");
@@ -108,6 +109,7 @@ void input_game_mode(ONE_GAME_t *nowGame_t){
  * @brief 绘制棋盘
 */
 void draw_the_chessboard(ONE_GAME_t *nowGame_t){
+    system("clear");
     uint8_t row,col;
     //第一行
     //第一列
