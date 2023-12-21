@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdint.h>
+#include <string.h>
+#include <stdlib.h> 
 
 #include "game.h"
 #include "AI.h"
@@ -223,17 +225,45 @@ void deal_invalid_input(ONE_GAME_t *nowGame_t){
         }
     }
 }
+/**
+ * @brief myatoi(只看数字)
+*/
+int8_t myatoi(uint8_t s[]){
+    int8_t ans=0;
+    for(uint8_t i=0;i<strlen(s)&&s[i]>='0'&&s[i]<='9';i++){
+        ans=ans*10+s[i]-'0';
+    }
+    return ans;
+}
 
 /**
  * @brief 落子输入,格式：row col（数字）
 */
 void input_chess_place(ONE_GAME_t *nowGame_t){
-    int32_t row,col;
+    int8_t row,col;
+    uint8_t s[10];
     if(nowGame_t->playerFlag==BLACK_PLAYER){
         if(nowGame_t->blackInputChessPlace.flag==INPUT_USED){
             if(nowGame_t->gameMode==PERSON_VS_PERSON||nowGame_t->gameMode==PERSON_VS_COMPUTER){
                 printf("please input the next place of black:x y\n");
-                scanf("%d %d",&row,&col);
+                scanf("%10s",s);
+                if(strcmp(s,"quit")==0){
+                    exit(0);
+                }
+                row=myatoi(s);
+                col=-1;
+                for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
+                    if(s[i]>='A'&&s[i]<='Z'){
+                        col=s[i]-'A';
+                    }
+                    if(s[i]>='a'&&s[i]<='z'){
+                        col=s[i]-'a';
+                    }
+                }
+                if(col==-1){
+                    nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
+                    input_chess_place(nowGame_t);
+                }
                 int8_t clear;
                 while((clear=getchar())!='\n'&&clear!=EOF);
                 nowGame_t->blackInputChessPlace.row=row;
@@ -249,8 +279,28 @@ void input_chess_place(ONE_GAME_t *nowGame_t){
                 case INDEX_OUT_OF_BOUNDS:
                     printf("The chessboard can't be bigger. Please choose a right one.\n");
                     break;
+                case INVALID_FORM:
+                    printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"\n");
+                    break;
             }
-            scanf("%d %d",&row,&col);
+            scanf("%10s",s);
+            if(strcmp(s,"quit")==0){
+                exit(0);
+            }
+            row=myatoi(s);
+            col=-1;
+            for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
+                if(s[i]>='A'&&s[i]<='Z'){
+                    col=s[i]-'A';
+                }
+                if(s[i]>='a'&&s[i]<='z'){
+                    col=s[i]-'a';
+                }
+            }
+            if(col==-1){
+                nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
+                input_chess_place(nowGame_t);
+            }
             int8_t clear;
             while((clear=getchar())!='\n'&&clear!=EOF);
             nowGame_t->blackInputChessPlace.row=row;
@@ -262,7 +312,24 @@ void input_chess_place(ONE_GAME_t *nowGame_t){
         if(nowGame_t->whiteInputChessPlace.flag==INPUT_USED){
             if(nowGame_t->gameMode==PERSON_VS_PERSON||nowGame_t->gameMode==COMPUTER_VS_PERSON){
                 printf("please input the next place of white:x y\n");
-                scanf("%d %d",&row,&col);
+                scanf("%10s",s);
+                if(strcmp(s,"quit")==0){
+                    exit(0);
+                }
+                row=myatoi(s);
+                col=-1;
+                for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
+                    if(s[i]>='A'&&s[i]<='Z'){
+                        col=s[i]-'A';
+                    }
+                    if(s[i]>='a'&&s[i]<='z'){
+                        col=s[i]-'a';
+                    }
+                }
+                if(col==-1){
+                    nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
+                    input_chess_place(nowGame_t);
+                }
                 int8_t clear;
                 while((clear=getchar())!='\n'&&clear!=EOF);
                 nowGame_t->whiteInputChessPlace.row=row;
@@ -278,8 +345,28 @@ void input_chess_place(ONE_GAME_t *nowGame_t){
                 case INDEX_OUT_OF_BOUNDS:
                     printf("The chessboard can't be bigger. Please choose a right one.\n");
                     break;
+                case INVALID_FORM:
+                    printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"\n");
+                    break;
             }
-            scanf("%d %d",&row,&col);
+            scanf("%10s",s);
+            if(strcmp(s,"quit")==0){
+                exit(0);
+            }
+            row=myatoi(s);
+            col=-1;
+            for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
+                if(s[i]>='A'&&s[i]<='Z'){
+                    col=s[i]-'A';
+                }
+                if(s[i]>='a'&&s[i]<='z'){
+                    col=s[i]-'a';
+                }
+            }
+            if(col==-1){
+                nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
+                input_chess_place(nowGame_t);
+            }
             int8_t clear;
             while((clear=getchar())!='\n'&&clear!=EOF);
             nowGame_t->whiteInputChessPlace.row=row;
@@ -449,6 +536,13 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
         }
     }
     return CONTINUE;
+}
+
+/**
+ * @brief 判断禁手
+*/
+uint8_t judge_the_forbidden_hand(ONE_GAME_t *nowGame_t){
+    return 0;
 }
 
 /** 
