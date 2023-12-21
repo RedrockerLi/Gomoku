@@ -22,6 +22,10 @@
 #define LAST_WHITE_CHESS "△"
 /***********************************************************************************/
 
+// #define CLEAR //打开则有清屏功能
+
+const int8_t direction[8]={0,1,1,0,1,1,1,-1};//两个数一组描述8个方向，调用方式2n&2n+1(row&col)
+
 void input_chess_place(ONE_GAME_t *nowGame_t);
 
 /**
@@ -63,7 +67,9 @@ void gameInit(ONE_GAME_t *nowGame_t){
  * @brief 绘制首页
 */
 void draw_the_start_page(void){
+    #ifdef CLEAR
     system("clear");
+    #endif
     printf("             .-'''-.                        .-'''-.                             \n");
     printf("            '   _    \\                     '   _    \\                           \n");
     printf("          /   /` '.   \\  __  __   ___    /   /` '.   \\     .                    \n");
@@ -111,94 +117,105 @@ void input_game_mode(ONE_GAME_t *nowGame_t){
  * @brief 绘制棋盘
 */
 void draw_the_chessboard(ONE_GAME_t *nowGame_t){
+    #ifdef CLEAR
     system("clear");
+    #endif
     uint8_t row,col;
     //第一行
     //第一列
     row=0,col=0;
+    printf("%2d",RANGE_OF_CHESSBOARD-row);
     switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
         case BLACK: printf("%s",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);break;
+        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
         case NONE:printf("%s",CHESSBOARD_CORNER_2); break;
         case WHITE:printf("%s",WHITE_CHESS); break;
-        case LAST_WHITE: printf("%s",LAST_WHITE_CHESS); break;
+        case LAST_WHITE: printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
     }
     //中间列
     for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
         switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
             case BLACK:printf("%s",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS); break;
+            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
             case NONE:printf("%s",CHESSBOARD_UP); break;
             case WHITE:printf("%s",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS); break;
+            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
         }
     }
     //最后列
     switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
         case BLACK:printf("%s\n",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS); break;
+        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
         case NONE:printf("%s\n",CHESSBOARD_CORNER_1); break;
         case WHITE:printf("%s\n",WHITE_CHESS); break;
-        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS); break;
+        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
     }
     //中间行
     for(row=1;row<RANGE_OF_CHESSBOARD-1;row++){
         //第一列
         col=0;
+        printf("%2d",RANGE_OF_CHESSBOARD-row);
         switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
             case BLACK:printf("%s",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS); break;
+            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
             case NONE:printf("%s",CHESSBOARD_LEFT); break;
             case WHITE:printf("%s",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS); break;
+            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
         }
         //中间列
         for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
             switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
                 case BLACK:printf("%s",BLACK_CHESS); break;
-                case LAST_BLACK:printf("%s",LAST_BLACK_CHESS); break;
+                case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
                 case NONE:printf("%s",CHESSBOARD_CENTER); break;
                 case WHITE:printf("%s",WHITE_CHESS); break;
-                case LAST_WHITE:printf("%s",LAST_WHITE_CHESS); break;
+                case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
             }
         }
         //最后列
         switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
             case BLACK:printf("%s\n",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS); break;
+            case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
             case NONE:printf("%s\n",CHESSBOARD_RIGHT); break;
             case WHITE:printf("%s\n",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS); break;
+            case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
         }
     }
     //最后行
     //第一列
     col=0;
+    printf("%2d",RANGE_OF_CHESSBOARD-row);
     switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
         case BLACK:printf("%s",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS); break;
+        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
         case NONE:printf("%s",CHESSBOARD_CORNER_3); break;
         case WHITE:printf("%s",WHITE_CHESS); break;
-        case LAST_WHITE:printf("%s",LAST_WHITE_CHESS); break;
+        case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
     }
     //中间列
     for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
         switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
             case BLACK:printf("%s",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS); break;
+            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
             case NONE:printf("%s",CHESSBOARD_DOWN); break;
             case WHITE:printf("%s",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS); break;
+            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
         }   
     }
     //最后列
     switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
         case BLACK:printf("%s\n",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS); break;
+        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
         case NONE:printf("%s\n",CHESSBOARD_CORNER_4); break;
         case WHITE:printf("%s\n",WHITE_CHESS); break;
-        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS); break;
+        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
     }
+    uint8_t i;
+    printf(" ");
+    for(i=0;i<RANGE_OF_CHESSBOARD-1;i++){
+        printf("%2c",'A'+i);
+    }
+    printf("%2c\n",'A'+i);
 }
 
 /**
@@ -225,47 +242,52 @@ void deal_invalid_input(ONE_GAME_t *nowGame_t){
         }
     }
 }
+
 /**
- * @brief myatoi(只看数字)
+ * @brief 输入并解析字符串
 */
-int8_t myatoi(uint8_t s[]){
-    int8_t ans=0;
-    for(uint8_t i=0;i<strlen(s)&&s[i]>='0'&&s[i]<='9';i++){
-        ans=ans*10+s[i]-'0';
+void deal_input(ONE_GAME_t *nowGame_t,int8_t *row,int8_t *col){
+    uint8_t s[10];
+    scanf("%10s",s);
+    int8_t clear;
+    while((clear=getchar())!='\n'&&clear!=EOF);
+    if(strcmp(s,"quit")==0){
+        exit(0);
     }
-    return ans;
+    *col=-1;
+    for(int8_t i=0;i<10;i++){
+        if(s[i]>='A'&&s[i]<='Z'){
+            *col=s[i]-'A';
+            break;
+        }
+        if(s[i]>='a'&&s[i]<='z'){
+            *col=s[i]-'a';
+            break;
+        }
+    }
+    *row=0;
+    for(int8_t i=0;i<10;i++){
+        if(s[i]>='0'&&s[i]<='9'){
+            *row=(*row)*10+s[i]-'0';
+        }
+    }
+    if(*col==-1||*row==0){
+        nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
+        input_chess_place(nowGame_t);
+    }
+    *row=RANGE_OF_CHESSBOARD-*row;
 }
 
 /**
- * @brief 落子输入,格式：row col（数字）
+ * @brief 落子输入
 */
 void input_chess_place(ONE_GAME_t *nowGame_t){
     int8_t row,col;
-    uint8_t s[10];
     if(nowGame_t->playerFlag==BLACK_PLAYER){
         if(nowGame_t->blackInputChessPlace.flag==INPUT_USED){
             if(nowGame_t->gameMode==PERSON_VS_PERSON||nowGame_t->gameMode==PERSON_VS_COMPUTER){
                 printf("please input the next place of black:x y\n");
-                scanf("%10s",s);
-                if(strcmp(s,"quit")==0){
-                    exit(0);
-                }
-                row=myatoi(s);
-                col=-1;
-                for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
-                    if(s[i]>='A'&&s[i]<='Z'){
-                        col=s[i]-'A';
-                    }
-                    if(s[i]>='a'&&s[i]<='z'){
-                        col=s[i]-'a';
-                    }
-                }
-                if(col==-1){
-                    nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
-                    input_chess_place(nowGame_t);
-                }
-                int8_t clear;
-                while((clear=getchar())!='\n'&&clear!=EOF);
+                deal_input(nowGame_t,&row,&col);
                 nowGame_t->blackInputChessPlace.row=row;
                 nowGame_t->blackInputChessPlace.col=col;
                 nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
@@ -283,26 +305,7 @@ void input_chess_place(ONE_GAME_t *nowGame_t){
                     printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"\n");
                     break;
             }
-            scanf("%10s",s);
-            if(strcmp(s,"quit")==0){
-                exit(0);
-            }
-            row=myatoi(s);
-            col=-1;
-            for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
-                if(s[i]>='A'&&s[i]<='Z'){
-                    col=s[i]-'A';
-                }
-                if(s[i]>='a'&&s[i]<='z'){
-                    col=s[i]-'a';
-                }
-            }
-            if(col==-1){
-                nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
-                input_chess_place(nowGame_t);
-            }
-            int8_t clear;
-            while((clear=getchar())!='\n'&&clear!=EOF);
+            deal_input(nowGame_t,&row,&col);
             nowGame_t->blackInputChessPlace.row=row;
             nowGame_t->blackInputChessPlace.col=col;
             nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
@@ -312,26 +315,7 @@ void input_chess_place(ONE_GAME_t *nowGame_t){
         if(nowGame_t->whiteInputChessPlace.flag==INPUT_USED){
             if(nowGame_t->gameMode==PERSON_VS_PERSON||nowGame_t->gameMode==COMPUTER_VS_PERSON){
                 printf("please input the next place of white:x y\n");
-                scanf("%10s",s);
-                if(strcmp(s,"quit")==0){
-                    exit(0);
-                }
-                row=myatoi(s);
-                col=-1;
-                for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
-                    if(s[i]>='A'&&s[i]<='Z'){
-                        col=s[i]-'A';
-                    }
-                    if(s[i]>='a'&&s[i]<='z'){
-                        col=s[i]-'a';
-                    }
-                }
-                if(col==-1){
-                    nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
-                    input_chess_place(nowGame_t);
-                }
-                int8_t clear;
-                while((clear=getchar())!='\n'&&clear!=EOF);
+                deal_input(nowGame_t,&row,&col);
                 nowGame_t->whiteInputChessPlace.row=row;
                 nowGame_t->whiteInputChessPlace.col=col;
                 nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
@@ -349,26 +333,7 @@ void input_chess_place(ONE_GAME_t *nowGame_t){
                     printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"\n");
                     break;
             }
-            scanf("%10s",s);
-            if(strcmp(s,"quit")==0){
-                exit(0);
-            }
-            row=myatoi(s);
-            col=-1;
-            for(int8_t i=0;i<10&&((s[i]>='A'&&s[i]<='Z')||(s[i]>='a'&&s[i]<='z'));i++){
-                if(s[i]>='A'&&s[i]<='Z'){
-                    col=s[i]-'A';
-                }
-                if(s[i]>='a'&&s[i]<='z'){
-                    col=s[i]-'a';
-                }
-            }
-            if(col==-1){
-                nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
-                input_chess_place(nowGame_t);
-            }
-            int8_t clear;
-            while((clear=getchar())!='\n'&&clear!=EOF);
+            deal_input(nowGame_t,&row,&col);
             nowGame_t->whiteInputChessPlace.row=row;
             nowGame_t->whiteInputChessPlace.col=col;
             nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
@@ -405,7 +370,7 @@ void place_the_chess(ONE_GAME_t *nowGame_t){
 }
 
 /**
- * @brief 判断胜负
+ * @brief 判断胜负and长连禁手
 */
 uint8_t call_the_game(ONE_GAME_t *nowGame_t){
     uint8_t countBlack,countWhite;
@@ -417,7 +382,11 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    return BLACK_WINE;
+                    if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col+1]==BLACK){
+                        return WHITE_WINE;
+                    }else{
+                        return BLACK_WINE;
+                    }
                 }
             }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
                 countBlack=0;
@@ -439,7 +408,11 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    return BLACK_WINE;
+                    if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+col]==BLACK){
+                        return WHITE_WINE;
+                    }else{
+                        return BLACK_WINE;
+                    }
                 }
             }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
                 countBlack=0;
@@ -462,7 +435,11 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    return BLACK_WINE;
+                    if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                        return WHITE_WINE;
+                    }else{
+                        return BLACK_WINE;
+                    }
                 }
             }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
                 countBlack=0;
@@ -480,7 +457,11 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    return BLACK_WINE;
+                    if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                        return WHITE_WINE;
+                    }else{
+                        return BLACK_WINE;
+                    }
                 }
             }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
                 countBlack=0;
@@ -503,7 +484,11 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    return BLACK_WINE;
+                    if(nowGame_t->stateOfChessboard[(row-1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                        return WHITE_WINE;
+                    }else{
+                        return BLACK_WINE;
+                    }
                 }
             }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
                 countBlack=0;
@@ -521,7 +506,11 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    return BLACK_WINE;
+                    if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col-1)]==BLACK){
+                        return WHITE_WINE;
+                    }else{
+                        return BLACK_WINE;
+                    }
                 }
             }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
                 countBlack=0;
@@ -539,9 +528,21 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
 }
 
 /**
+ * @brief 判断棋子状态
+ * @param direction:范围{0,1,2,3}表示4个方向
+*/
+uint8_t judge_state_of_chess(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col,uint8_t directionChoice){
+    uint8_t stateOfChess=SINGLE;
+    for(uint8_t i=0;((row+i)<RANGE_OF_CHESSBOARD)&&(nowGame_t,row+direction[2*directionChoice]*i,col+direction[2*directionChoice+1]*i)!=FORBIDDEN_HAND;i++)
+    return;
+}
+
+/**
  * @brief 判断禁手
 */
-uint8_t judge_the_forbidden_hand(ONE_GAME_t *nowGame_t){
+uint8_t judge_forbidden_hand(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col){
+    uint8_t countBlack,countWhite;
+    
     return 0;
 }
 

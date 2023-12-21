@@ -5,7 +5,7 @@
 
 #include "AI.h"
 
-#define RANGE_OF_CHESSBOARD 15
+#define RANGE_OF_CHESSBOARD 15 //超过26后要改输入部分的逻辑
 
 
 enum STATE_OF_GAME_E{
@@ -23,14 +23,10 @@ enum STATE_OF_GAME_E{
     SINGLE,
     TWO,
     FACK_THREE,
-    LIVE_THREE,
     FIGHT_FOUR,
+    LIVE_THREE,
     LIVE_FOUR,
-    FIVE,
     FORBIDDEN_HAND,
-    THREE_THREE,
-    FOUR_FOUR,
-    TOO_LONG,
 
     BLACK_PLAYER, //游戏玩家
     WHITE_PLAYER,
