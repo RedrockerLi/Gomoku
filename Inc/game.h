@@ -5,7 +5,7 @@
 
 #include "AI.h"
 
-#define RANGE_OF_CHESSBOARD 15 //超过26后要改输入部分的逻辑
+#define RANGE_OF_CHESSBOARD 15 //因为棋形判断时采用了位运算，所以不能随意更改此数值
 
 
 enum STATE_OF_GAME_E{
@@ -21,16 +21,6 @@ enum STATE_OF_GAME_E{
     WHITE,
     LAST_WHITE,
 
-    SINGLE,
-    TWO,
-    FACK_THREE,
-    FIGHT_FOUR,
-    DEAD_THREE,
-    DEAD_FOUR,
-    LIVE_THREE,
-    LIVE_FOUR,
-    FORBIDDEN_HAND,
-
     BLACK_PLAYER, //游戏玩家
     WHITE_PLAYER,
 
@@ -44,6 +34,15 @@ enum STATE_OF_GAME_E{
     INPUT_UNUSED, //输入未使用
     INPUT_USED,//输入已使用
 }; 
+
+enum STATE_OF_CHASS_E{
+    SINGLE,
+    TWO,
+    LIVE_THREE,
+    FIGHT_FOUR,
+    LIVE_FOUR,
+    FORBIDDEN_HAND,
+};
 
 typedef struct 
 {
@@ -68,11 +67,11 @@ typedef struct
 
 const uint8_t * get_state_of_chessboard_point(void);
 
-void gameInit(ONE_GAME_t *nowGame_t);
+void gameInit(ONE_GAME_t * const nowGame_t);
 void draw_the_start_page(void);
-void input_game_mode(ONE_GAME_t *nowGame_t);
-void draw_the_chessboard(ONE_GAME_t *nowGame_t);
-uint8_t judge_forbidden_hand(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col);
-void continue_the_game(ONE_GAME_t *nowGame_t);
+void input_game_mode(ONE_GAME_t * const nowGame_t);
+void draw_the_chessboard(ONE_GAME_t * const nowGame_t);
+uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col);
+void continue_the_game(ONE_GAME_t * const nowGame_t);
 
 #endif
