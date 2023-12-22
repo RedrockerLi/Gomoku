@@ -16,6 +16,7 @@ enum STATE_OF_GAME_E{
 
     BLACK, //棋盘是黑子
     LAST_BLACK, //刚刚落下的黑子
+    TEMP_BLACK, //判断复杂禁手时落下的临时黑子
     NONE,
     WHITE,
     LAST_WHITE,
@@ -24,6 +25,8 @@ enum STATE_OF_GAME_E{
     TWO,
     FACK_THREE,
     FIGHT_FOUR,
+    DEAD_THREE,
+    DEAD_FOUR,
     LIVE_THREE,
     LIVE_FOUR,
     FORBIDDEN_HAND,
@@ -69,6 +72,7 @@ void gameInit(ONE_GAME_t *nowGame_t);
 void draw_the_start_page(void);
 void input_game_mode(ONE_GAME_t *nowGame_t);
 void draw_the_chessboard(ONE_GAME_t *nowGame_t);
+uint8_t judge_forbidden_hand(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col);
 void continue_the_game(ONE_GAME_t *nowGame_t);
 
 #endif

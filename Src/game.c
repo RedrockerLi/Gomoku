@@ -23,8 +23,9 @@
 /***********************************************************************************/
 
 // #define CLEAR //打开则有清屏功能
+#define ONLY_BLACKPLEAR //打开则只有黑棋玩家，用于实验禁手
 
-const int8_t direction[8]={0,1,1,0,1,1,1,-1};//两个数一组描述8个方向，调用方式2n&2n+1(row&col)
+const int8_t direction[16]={0,1, 0,-1, 1,0, -1,0, 1,1, -1,-1, 1,-1, -1,1};//两个数一组描述8个方向，调用方式2n&2n+1(row&col)
 
 void input_chess_place(ONE_GAME_t *nowGame_t);
 
@@ -383,6 +384,7 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col+1]==BLACK){
+                        printf("长连禁手成立\n");
                         return WHITE_WINE;
                     }else{
                         return BLACK_WINE;
@@ -409,6 +411,7 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+col]==BLACK){
+                        printf("长连禁手成立\n");
                         return WHITE_WINE;
                     }else{
                         return BLACK_WINE;
@@ -436,6 +439,7 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                        printf("长连禁手成立\n");
                         return WHITE_WINE;
                     }else{
                         return BLACK_WINE;
@@ -458,6 +462,7 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                        printf("长连禁手成立\n");
                         return WHITE_WINE;
                     }else{
                         return BLACK_WINE;
@@ -485,6 +490,7 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row-1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                        printf("长连禁手成立\n");
                         return WHITE_WINE;
                     }else{
                         return BLACK_WINE;
@@ -507,6 +513,7 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col-1)]==BLACK){
+                        printf("长连禁手成立\n");
                         return WHITE_WINE;
                     }else{
                         return BLACK_WINE;
@@ -528,12 +535,42 @@ uint8_t call_the_game(ONE_GAME_t *nowGame_t){
 }
 
 /**
+ * @brief 清理棋盘中的TEMP_BLACK
+*/
+void clean_temp_black(ONE_GAME_t *nowGame_t){
+    for(int row=0;row<RANGE_OF_CHESSBOARD;row++){
+        for(int col=0;col<RANGE_OF_CHESSBOARD;col++){
+            if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==TEMP_BLACK){
+                nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=NONE;
+            }
+        }
+    }
+}
+
+/**
  * @brief 判断棋子状态
- * @param direction:范围{0,1,2,3}表示4个方向
+ * @param direction:范围{0-7}表示8个方向
 */
 uint8_t judge_state_of_chess(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col,uint8_t directionChoice){
+    uint8_t stdChess=nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col];
     uint8_t stateOfChess=SINGLE;
-    for(uint8_t i=0;((row+i)<RANGE_OF_CHESSBOARD)&&(nowGame_t,row+direction[2*directionChoice]*i,col+direction[2*directionChoice+1]*i)!=FORBIDDEN_HAND;i++)
+    uint8_t countBlank=0;
+    for(int8_t i=0;((row+direction[2*directionChoice]*i)<RANGE_OF_CHESSBOARD)&&((col+direction[2*directionChoice+1]*i)<RANGE_OF_CHESSBOARD)&&nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]!=(stdChess==WHITE?BLACK:WHITE)&&(nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]!=NONE||countBlank==2);i++){//不能越界，不能是其他棋，不能是第3个空
+        if((nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]==NONE)&&judge_forbidden_hand(nowGame_t,row+direction[2*directionChoice]*i,col+direction[2*directionChoice+1]*i)!=FORBIDDEN_HAND){
+            countBlank++;
+        }
+        if(nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]==BLACK){
+            stateOfChess++;//call_the_game运行完成后，不可能连接超过5个，因此最高是FIGHT_FOUR
+        }
+    }
+    for(int8_t i=-1;((row+direction[2*directionChoice]*i)<RANGE_OF_CHESSBOARD)&&((col+direction[2*directionChoice+1]*i)<RANGE_OF_CHESSBOARD)&&nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]!=(stdChess==WHITE?BLACK:WHITE)&&(nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]!=NONE||countBlank==2);i--){//不能越界，不能是其他棋，不能是第3个空
+        if((nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]==NONE)&&judge_forbidden_hand(nowGame_t,row+direction[2*directionChoice]*i,col+direction[2*directionChoice+1]*i)!=FORBIDDEN_HAND){
+            countBlank++;
+        }
+        if(nowGame_t->stateOfChessboard[(row+direction[2*directionChoice]*i)*RANGE_OF_CHESSBOARD+(col+direction[2*directionChoice+1]*i)]==BLACK){
+            stateOfChess++;//call_the_game运行完成后，不可能连接超过5个，因此最高是FIGHT_FOUR
+        }
+    }
     return;
 }
 
@@ -541,6 +578,9 @@ uint8_t judge_state_of_chess(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col,uint8
  * @brief 判断禁手
 */
 uint8_t judge_forbidden_hand(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col){
+    if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]!=BLACK){
+        
+    }
     uint8_t countBlack,countWhite;
     
     return 0;
@@ -563,11 +603,13 @@ void continue_the_game(ONE_GAME_t *nowGame_t){
                 printf("WINNER:WHITE\n");
                 return;
             }
+            #ifdef ONLY_BLACK
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 nowGame_t->playerFlag=WHITE_PLAYER;
             }else if(nowGame_t->playerFlag==WHITE_PLAYER){
                 nowGame_t->playerFlag=BLACK_PLAYER;
             }
+            #endif
         }
     }else if(nowGame_t->gameMode==PERSON_VS_COMPUTER){
         while (nowGame_t->gameWinner==CONTINUE){
