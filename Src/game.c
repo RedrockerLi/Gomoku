@@ -348,32 +348,23 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
 */
 void place_the_chess(ONE_GAME_t * const nowGame_t){
     if(nowGame_t->playerFlag==BLACK_PLAYER&&nowGame_t->blackInputChessPlace.flag==INPUT_UNUSED){
-        // if(nowGame_t->lastBlackInputChessPlace.flag==INPUT_UNUSED){
-        //     nowGame_t->stateOfChessboard[nowGame_t->lastBlackInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->lastBlackInputChessPlace.col]=BLACK;
-        //     nowGame_t->lastBlackInputChessPlace.flag=INPUT_USED;
-        // }
         nowGame_t->stateOfChessboard[nowGame_t->blackInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->blackInputChessPlace.col]=LAST_BLACK;
         nowGame_t->lastBlackInputChessPlace.row=nowGame_t->blackInputChessPlace.row;
         nowGame_t->lastBlackInputChessPlace.col=nowGame_t->blackInputChessPlace.col;
-        // nowGame_t->lastBlackInputChessPlace.flag=INPUT_UNUSED;
         nowGame_t->blackInputChessPlace.flag=INPUT_USED;
     }else if(nowGame_t->playerFlag==WHITE_PLAYER&&nowGame_t->whiteInputChessPlace.flag==INPUT_UNUSED){
-        // if(nowGame_t->lastWhiteInputChessPlace.flag==INPUT_UNUSED){
-        //     nowGame_t->stateOfChessboard[nowGame_t->lastWhiteInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->lastWhiteInputChessPlace.col]=WHITE;
-        //     nowGame_t->lastWhiteInputChessPlace.flag=INPUT_USED;
-        // }
         nowGame_t->stateOfChessboard[nowGame_t->whiteInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->whiteInputChessPlace.col]=LAST_WHITE;
-        // nowGame_t->lastWhiteInputChessPlace.row=nowGame_t->whiteInputChessPlace.row;
-        // nowGame_t->lastWhiteInputChessPlace.col=nowGame_t->whiteInputChessPlace.col;
-        // nowGame_t->lastWhiteInputChessPlace.flag=INPUT_UNUSED;
+        nowGame_t->lastWhiteInputChessPlace.row=nowGame_t->whiteInputChessPlace.row;
+        nowGame_t->lastWhiteInputChessPlace.col=nowGame_t->whiteInputChessPlace.col;
         nowGame_t->whiteInputChessPlace.flag=INPUT_USED;
     }
 }
 
 /**
  * @brief 判断胜负and长连禁手
+ * @param mode 控制模式|0:有print|1:无print|
 */
-uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastCol){
+uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastCol,uint8_t mode){
     uint8_t countBlack,countWhite,row,col;
     //按行搜索
     row=lastRow;
@@ -384,7 +375,9 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
             countWhite=0;
             if(countBlack==5){
                 if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col+1]==BLACK){
-                    printf("Long-Ladder Suicide\n");
+                    if(mode==0){
+                        printf("Long-Ladder Suicide!\n");
+                    }
                     return FORBIDDEN_HAND;
                 }else{
                     return BLACK_WINE;
@@ -410,7 +403,9 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
             countWhite=0;
             if(countBlack==5){
                 if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+col]==BLACK){
-                    printf("Long-Ladder Suicide\n");
+                    if(mode==0){
+                        printf("Long-Ladder Suicide!\n");
+                    }
                     return FORBIDDEN_HAND;
                 }else{
                     return BLACK_WINE;
@@ -435,7 +430,9 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
-                        printf("Long-Ladder Suicide\n");
+                        if(mode==0){
+                            printf("Long-Ladder Suicide!\n");
+                        }
                         return FORBIDDEN_HAND;
                     }else{
                         return BLACK_WINE;
@@ -459,7 +456,9 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
-                        printf("Long-Ladder Suicide\n");
+                        if(mode==0){
+                            printf("Long-Ladder Suicide!\n");
+                        }
                         return FORBIDDEN_HAND;
                     }else{
                         return BLACK_WINE;
@@ -485,7 +484,9 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row-1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
-                        printf("Long-Ladder Suicide\n");
+                        if(mode==0){
+                            printf("Long-Ladder Suicide!\n");
+                        }
                         return FORBIDDEN_HAND;
                     }else{
                         return BLACK_WINE;
@@ -509,7 +510,9 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                 countWhite=0;
                 if(countBlack==5){
                     if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col-1)]==BLACK){
-                        printf("Long-Ladder Suicide\n");
+                        if(mode==0){
+                            printf("Long-Ladder Suicide!\n");
+                        }
                         return FORBIDDEN_HAND;
                     }else{
                         return BLACK_WINE;
@@ -547,46 +550,160 @@ void clean_temp_black(ONE_GAME_t * const nowGame_t){
  * @brief 判断棋子状态
  * @param direction 范围{0-3}表示4个方向
  * @param stdChess 下在（row,col）的棋子类型
+ * @param times 调用次数
+ * @param mode 控制模式|0,1:3+4|2:检测所有类型|
 */
-uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, const uint8_t col,const uint8_t stdChess,const uint8_t directionChoice){
+uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, const uint8_t col,const uint8_t stdChess,const uint8_t directionChoice,uint8_t times,uint8_t mode){
     uint32_t lineToJudge=0; //两位一组，00为不可落子，11为空，01为和stdchess相同,相同方向没有特殊要求
     uint8_t count=0;
     uint8_t stdPlace=0;//待判断的棋子在第几位.
-    for(int8_t i=-(row<col?row:col);row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD;i++,count++){
-        if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice])]==stdChess){
-            lineToJudge=lineToJudge+1<<(count*2);
-        }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice])]==NONE){
-            if(judge_forbidden_hand(nowGame_t,row+i*direction[2*directionChoice],col+i*direction[2*directionChoice])!=FORBIDDEN_HAND){
+    if(directionChoice==0){
+        stdPlace=col;
+        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
+                lineToJudge=lineToJudge+1<<(count*2);
+            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
                 lineToJudge=lineToJudge+3<<(count*2);
             }
         }
-        if(i==0){
-            stdPlace=count;
+    }else if(directionChoice==1){
+        stdPlace=row;
+        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
+                lineToJudge=lineToJudge+1<<(count*2);
+            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                lineToJudge=lineToJudge+3<<(count*2);
+            }
         }
-    }  
+    }else if(directionChoice==2){
+        stdPlace=(row<col?row:col);
+        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
+                lineToJudge=lineToJudge+1<<(count*2);
+            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                lineToJudge=lineToJudge+3<<(count*2);
+            }
+        }
+    }else{
+        stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
+        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
+                lineToJudge=lineToJudge+1<<(count*2);
+            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                lineToJudge=lineToJudge+3<<(count*2);
+            }
+        }
+    }
+    
     uint8_t stateOfChess=0;
+    uint32_t window;
+    uint16_t samplingResult;
+    if(stdPlace>=1){
+        window=0b111111<<(stdPlace*2-2);
+        samplingResult=lineToJudge&window;
+    }else{
+        window=0b1111; //棋盘端采样
+        samplingResult=lineToJudge&window<<2;
+    }
+    if(mode==2){
+        if(samplingResult==0b000100){
+            stateOfChess=SINGLE_0B;
+        }else if(samplingResult==0b000111||samplingResult==0b110100){
+            stateOfChess=SINGLE_1B;
+        }else if(samplingResult==0b110111){
+            stateOfChess=SINGLE_2B;
+        }
+        for(window=(0x3FF)<<(stdPlace*2),count=0;count<5&&count<=stdPlace+1;count++,window=window>>2){
+            if(count==stdPlace+1){
+                samplingResult=lineToJudge&window<<2;
+            }else{
+                samplingResult=lineToJudge&window;
+            }
+            if(count!=0){
+                if(samplingResult>>2==0b11010111){
+                    if(stateOfChess<TWO_2B){
+                    stateOfChess=TWO_2B;
+                    }                
+                }else if(samplingResult>>2==0b11010100||samplingResult>>2==0b00010111){
+                    if(stateOfChess<TWO_1B){
+                    stateOfChess=TWO_1B;
+                    }
+                }else if(samplingResult>>2==0b00010100){
+                    if(stateOfChess<TWO_0B){
+                    stateOfChess=TWO_0B;
+                    }
+                }
+            }
+            if(samplingResult==0b1101110111){
+                if(stateOfChess<TWO_JUMP1){
+                    stateOfChess=TWO_JUMP1;
+                }
+            }else if(samplingResult==0b1101111101||samplingResult==0b0111110111){
+                if(stateOfChess<TWO_JUMP2){
+                    stateOfChess=TWO_JUMP2;
+                }
+            }else if(samplingResult==0b0111111101){
+                if(stateOfChess<TWO_JUMP3){
+                    stateOfChess=TWO_JUMP3;
+                }
+            }
+        }
+    }
     uint8_t fourCount=0;
-    for(uint32_t window=(0xFFF)<<(stdPlace*2),count=0;count<6&&count<stdPlace;count++,window=window>>2){
-        if((lineToJudge&window)==0b110101010111){
-            stateOfChess=LIVE_FOUR;
+    for(window=(0xFFF)<<(stdPlace*2),count=0;count<6&&count<=stdPlace+1;count++,window=window>>2){
+        if(count==stdPlace+1){
+            samplingResult=lineToJudge&window<<2;
+        }else{
+            samplingResult=lineToJudge&window;
+        }
+        if(samplingResult==0b110101010111){
+            if(stateOfChess<LIVE_FOUR){
+                stateOfChess=LIVE_FOUR;
+            }
             fourCount++;
             if(fourCount==2){
                 return FORBIDDEN_HAND;
             }
-        }else if((lineToJudge&window)==0b000101010111||(lineToJudge&window)==0b110101010100||(lineToJudge&window)==0b011101010100||(lineToJudge&window)==0b011101010111){
-            stateOfChess=FIGHT_FOUR;
+        }else if(samplingResult==0b000101010111||samplingResult==0b110101010100||samplingResult==0b011101010100||samplingResult==0b011101010111){
+            if(stateOfChess<FIGHT_FOUR){
+                stateOfChess=FIGHT_FOUR;
+            }
             fourCount++;
             if(fourCount==2){
                 return FORBIDDEN_HAND;
             }
-        }else if(count!=0&&((lineToJudge&window)>>2==0b0101011101||(lineToJudge&window)>>2==0b0101110101)){
-            stateOfChess=FIGHT_FOUR;
+        }else if(count!=0&&(samplingResult>>2==0b0101011101||samplingResult>>2==0b0101110101)){
+            if(stateOfChess<FIGHT_FOUR){
+                stateOfChess=FIGHT_FOUR;
+            }
             fourCount++;
             if(fourCount==2){
                 return FORBIDDEN_HAND;
             }
-        }else if((lineToJudge&window)==0b110101011111||(lineToJudge&window)==0b110101110111||(lineToJudge&window)==0b110111010111||(lineToJudge&window)==0b111101010111){
-            stateOfChess=LIVE_THREE;
+        }else if(samplingResult==0b110101011111){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(1-count)*direction[2*directionChoice],col+(1-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+                if(stateOfChess<LIVE_THREE){
+                    stateOfChess=LIVE_THREE;
+                }
+            }
+        }else if(samplingResult==0b110101110111){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(2-count)*direction[2*directionChoice],col+(2-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+                if(stateOfChess<LIVE_THREE){
+                    stateOfChess=LIVE_THREE;
+                }
+            }
+        }else if(samplingResult==0b110111010111){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(3-count)*direction[2*directionChoice],col+(3-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+                if(stateOfChess<LIVE_THREE){
+                    stateOfChess=LIVE_THREE;
+                }
+            }
+        }else if(samplingResult==0b111101010111){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(4-count)*direction[2*directionChoice],col+(4-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+                if(stateOfChess<LIVE_THREE){
+                    stateOfChess=LIVE_THREE;
+                }
+            }
         }
     }
     return stateOfChess;
@@ -594,14 +711,51 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
 
 /**
  * @brief 判断禁手
+ * @param times 调用次数,判断待判断的为第0次,递归第n次是n
+ * @param mode 控制模式|0:33+44|1:33+44+长连|
 */
-uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
+uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t times,uint8_t mode){
+    uint8_t forbiddenState=FORBIDDEN_HAND-1;
+    uint8_t countThreeOrFour=0;
     if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
         nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=TEMP_BLACK;
     }
-    uint8_t countBlack,countWhite;
-    
-    return 0;
+    if(mode==1){
+        forbiddenState=call_the_game(nowGame_t,row,col,1);
+    }
+    if(forbiddenState!=FORBIDDEN_HAND){
+        for(int i=0;i<4;i++){
+            if(judge_state_of_chess(nowGame_t,row,col,BLACK,i,times,mode)==LIVE_THREE){
+                countThreeOrFour++;
+            }
+            if(countThreeOrFour==2){
+                if(mode==0){
+                    printf("Three-Three Forbidden!\n");
+                }
+                forbiddenState=FORBIDDEN_HAND;
+                break;
+            }
+        }
+    }
+    if(forbiddenState!=FORBIDDEN_HAND){
+        countThreeOrFour=0;
+        for(int i=0;i<4;i++){
+            if(judge_state_of_chess(nowGame_t,row,col,BLACK,i,times,mode)==LIVE_FOUR||judge_state_of_chess(nowGame_t,row,col,BLACK,i,times,0)==FIGHT_FOUR){
+                countThreeOrFour++;
+            }
+            if(countThreeOrFour==2){
+                if(mode==0){
+                    printf("Four-Four Forbidden!\n");
+                }
+                forbiddenState=FORBIDDEN_HAND;
+                break;
+            }
+        }
+    }
+    if(times==1){//完成一个点的判断后,清除棋盘上的暂放的黑子
+        clean_temp_black(nowGame_t);
+    }
+    return forbiddenState;
 }
 
 /** 
@@ -614,9 +768,14 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
-                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col);
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
+                if(nowGame_t->gameWinner==CONTINUE){
+                    if(judge_forbidden_hand(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->blackInputChessPlace.col,0,0)==FORBIDDEN_HAND){
+                        nowGame_t->gameWinner=WHITE_WINE;
+                    }
+                }
             }else{
-                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col);
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col,0);
             }
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
@@ -639,9 +798,14 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
-                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col);
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
+                if(nowGame_t->gameWinner==CONTINUE){
+                    if(judge_forbidden_hand(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->blackInputChessPlace.col,0,0)==FORBIDDEN_HAND){
+                        nowGame_t->gameWinner=WHITE_WINE;
+                    }
+                }
             }else{
-                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col);
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col,0);
             }
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
@@ -662,9 +826,14 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
-                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col);
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
+                if(nowGame_t->gameWinner==CONTINUE){
+                    if(judge_forbidden_hand(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->blackInputChessPlace.col,0,0)==FORBIDDEN_HAND){
+                        nowGame_t->gameWinner=WHITE_WINE;
+                    }
+                }
             }else{
-                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col);
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col,0);
             }
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
