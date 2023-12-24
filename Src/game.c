@@ -720,25 +720,25 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                 return FORBIDDEN_HAND;
             }
         }else if(samplingResult==0b110101011111){
-            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(1-count)*direction[2*directionChoice],col+(1-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(1-count)*direction[2*directionChoice],col+(1-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND){
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
                 }
             }
         }else if(samplingResult==0b110101110111){
-            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(2-count)*direction[2*directionChoice],col+(2-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(2-count)*direction[2*directionChoice],col+(2-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND){
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
                 }
             }
         }else if(samplingResult==0b110111010111){
-            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(3-count)*direction[2*directionChoice],col+(3-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(3-count)*direction[2*directionChoice],col+(3-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND){
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
                 }
             }
         }else if(samplingResult==0b111101010111){
-            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(4-count)*direction[2*directionChoice],col+(4-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,mode)!=FORBIDDEN_HAND){
+            if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(4-count)*direction[2*directionChoice],col+(4-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],times+1,1)!=FORBIDDEN_HAND){
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
                 }
@@ -751,7 +751,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
 /**
  * @brief 判断禁手
  * @param times 调用次数,判断待判断的为第0次,递归第n次是n
- * @param mode 控制模式|0:33+44|1:33+44+长连|
+ * @param mode 控制模式|0:33+44|1:33+44+长连(无输出)|
 */
 uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t times,uint8_t mode){
     uint8_t forbiddenState=FORBIDDEN_HAND-1;
