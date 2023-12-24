@@ -557,55 +557,94 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
     uint32_t lineToJudge=0; //两位一组，00为不可落子，11为空，01为和stdchess相同,相同方向没有特殊要求
     uint8_t count=0;
     uint8_t stdPlace=0;//待判断的棋子在第几位.
-    if(directionChoice==0){
-        stdPlace=col;
-        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
-                lineToJudge=lineToJudge+1<<(count*2);
-            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
-                lineToJudge=lineToJudge+3<<(count*2);
+    if(stdChess==BLACK){
+        if(directionChoice==0){
+            stdPlace=col;
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
             }
-        }
-    }else if(directionChoice==1){
-        stdPlace=row;
-        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
-                lineToJudge=lineToJudge+1<<(count*2);
-            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
-                lineToJudge=lineToJudge+3<<(count*2);
+        }else if(directionChoice==1){
+            stdPlace=row;
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
             }
-        }
-    }else if(directionChoice==2){
-        stdPlace=(row<col?row:col);
-        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
-                lineToJudge=lineToJudge+1<<(count*2);
-            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
-                lineToJudge=lineToJudge+3<<(count*2);
+        }else if(directionChoice==2){
+            stdPlace=(row<col?row:col);
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
+            }
+        }else{
+            stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
             }
         }
     }else{
-        stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
-        for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-            if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==stdChess){
-                lineToJudge=lineToJudge+1<<(count*2);
-            }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
-                lineToJudge=lineToJudge+3<<(count*2);
+        if(directionChoice==0){
+            stdPlace=col;
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
+            }
+        }else if(directionChoice==1){
+            stdPlace=row;
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
+            }
+        }else if(directionChoice==2){
+            stdPlace=(row<col?row:col);
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
+            }
+        }else{
+            stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
+            for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
+                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                    lineToJudge=lineToJudge+(0b01<<(count*2));
+                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                    lineToJudge=lineToJudge+(0b11<<(count*2));
+                }
             }
         }
     }
-    
     uint8_t stateOfChess=0;
     uint32_t window;
     uint16_t samplingResult;
-    if(stdPlace>=1){
-        window=0b111111<<(stdPlace*2-2);
-        samplingResult=lineToJudge&window;
-    }else{
-        window=0b1111; //棋盘端采样
-        samplingResult=lineToJudge&window<<2;
-    }
     if(mode==2){
+        if(stdPlace>=1){
+            window=0b111111<<(stdPlace*2-2);
+            samplingResult=(lineToJudge&window)>>(stdPlace*2-2);
+        }else{
+            window=0b1111; //棋盘端采样
+            samplingResult=lineToJudge&(window<<2);
+        }
         if(samplingResult==0b000100){
             stateOfChess=SINGLE_0B;
         }else if(samplingResult==0b000111||samplingResult==0b110100){
@@ -615,9 +654,9 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }
         for(window=(0x3FF)<<(stdPlace*2),count=0;count<5&&count<=stdPlace+1;count++,window=window>>2){
             if(count==stdPlace+1){
-                samplingResult=lineToJudge&window<<2;
+                samplingResult=lineToJudge&(window<<2);
             }else{
-                samplingResult=lineToJudge&window;
+                samplingResult=(lineToJudge&window)>>((stdPlace-count)*2);
             }
             if(count!=0){
                 if(samplingResult>>2==0b11010111){
@@ -652,9 +691,9 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
     uint8_t fourCount=0;
     for(window=(0xFFF)<<(stdPlace*2),count=0;count<6&&count<=stdPlace+1;count++,window=window>>2){
         if(count==stdPlace+1){
-            samplingResult=lineToJudge&window<<2;
+            samplingResult=lineToJudge&(window<<2);
         }else{
-            samplingResult=lineToJudge&window;
+            samplingResult=(lineToJudge&window)>>((stdPlace-count)*2);
         }
         if(samplingResult==0b110101010111){
             if(stateOfChess<LIVE_FOUR){
