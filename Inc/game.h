@@ -83,7 +83,7 @@ void gameInit(ONE_GAME_t * const nowGame_t);
 void draw_the_start_page(void);
 void input_game_mode(ONE_GAME_t * const nowGame_t);
 void draw_the_chessboard(ONE_GAME_t * const nowGame_t);
-uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t times,uint8_t mode);
+uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t mode);
 void continue_the_game(ONE_GAME_t * const nowGame_t);
 
 #endif
