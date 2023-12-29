@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#include "AI.h"
+#include "main.h"
 
 #define RANGE_OF_CHESSBOARD 15 //因为棋形判断时采用了位运算，所以不能随意更改此数值
 
@@ -45,10 +45,12 @@ enum STATE_OF_CHASS_E{
     TWO_0B,
     TWO_1B,
     TWO_2B,
+    FAKE_THREE,
     LIVE_THREE,
     FIGHT_FOUR,
     LIVE_FOUR,
     FORBIDDEN_HAND,
+    LENGTH_OF_STATES,
 };
 
 typedef struct 
