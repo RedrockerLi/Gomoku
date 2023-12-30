@@ -122,5 +122,30 @@ $d\ge \min\{a,b,c\}$
 
 下面需要看的是,对于父节点不同的在同一级上的子节点,剪枝的比较有没有意义.其实是有意义的,比如上图的第二MIN层,3节点的下面如果还有6,8等若干情况,都没办法使第二MIN层3节点变化,更别说影响更高层的节点.也就是说,上述的剪枝效率是较低的.
 
-用一个单独的数组来存放每一层的相关参数自然可以,但Wiki上的伪代码并不是这样写的.而且我们前面的分析中也没有涉及.
+$\alpha$: 在MAX轮次会被更新，用来记录当前节点的各个子节点中的最大值，如果子节点被剪枝了，那就是抛去被裁剪部分之后的最大值。
 
+$\beta$: 在MIN轮次会被更新，用来记录当前节点的各个子节点中的最小值，如果子节点被剪枝了，那就是抛去被裁剪部分之后的最小值。
+
+每一个节点都会有独立的$\alpha,\beta$,这两个参数会从叶子节点向根节点传递,进入其他分支.
+
+```
+function alphabeta(node, depth, α, β, maximizingPlayer) // node = 节点，depth = 深度，maximizingPlayer = 大分玩家
+     if depth = 0 or node是终端节点
+         return 打分值
+     if maximizingPlayer
+         v := -∞
+         for 每个子节点
+             v := max(v, alphabeta(child, depth - 1, α, β, FALSE)) // child = 子节点
+             α := max(α, v)
+             if β ≤ α
+                 break // β裁剪
+         return v
+     else
+         v := ∞
+         for 每个子节点
+             v := min(v, alphabeta(child, depth - 1, α, β, TRUE))
+             β := min(β, v)
+             if β ≤ α
+                 break // α裁剪
+         return v
+```
