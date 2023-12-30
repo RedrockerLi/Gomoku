@@ -26,9 +26,6 @@ int main(){
     gameInit(&classGame_t);
     draw_the_start_page();
     input_game_mode(&classGame_t);
-    set_black(&classGame_t,14,0);
-    set_black(&classGame_t,13,0);
-    set_black(&classGame_t,12,0);
     draw_the_chessboard(&classGame_t);
     continue_the_game(&classGame_t);
     #endif

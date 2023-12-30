@@ -224,22 +224,18 @@ void check_invalid_input(ONE_GAME_t * const nowGame_t){
         if(nowGame_t->blackInputChessPlace.flag==INPUT_UNUSED){
             if(nowGame_t->blackInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->blackInputChessPlace.col>=RANGE_OF_CHESSBOARD){
                 nowGame_t->blackInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
-                // input_chess_place(nowGame_t);
             }
             if(nowGame_t->stateOfChessboard[nowGame_t->blackInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->blackInputChessPlace.col]!=NONE){
                 nowGame_t->blackInputChessPlace.flag=OCCUPYED;
-                // input_chess_place(nowGame_t);
             }
         }
     }else if(nowGame_t->playerFlag==WHITE_PLAYER){
         if(nowGame_t->whiteInputChessPlace.flag==INPUT_UNUSED){
             if(nowGame_t->whiteInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->whiteInputChessPlace.col>=RANGE_OF_CHESSBOARD){
                 nowGame_t->whiteInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
-                // input_chess_place(nowGame_t);
             }
             if(nowGame_t->stateOfChessboard[nowGame_t->whiteInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->whiteInputChessPlace.col]!=NONE){
                 nowGame_t->whiteInputChessPlace.flag=OCCUPYED;
-                // input_chess_place(nowGame_t);
             }
         }
     }
