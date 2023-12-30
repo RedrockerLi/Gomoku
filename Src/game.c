@@ -23,7 +23,7 @@
 /***********************************************************************************/
 
 // #define CLEAR //打开则有清屏功能
-#define ONLY_BLACKPLEAR //打开则只有黑棋玩家，用于实验禁手
+// #define ONLY_BLACKPLEAR //打开则只有黑棋玩家，用于实验禁手
 
 const int8_t direction[8]={0,1, 1,0, 1,1, 1,-1};//两个数一组描述4个方向，调用方式2n&2n+1(row&col)
 
@@ -222,24 +222,28 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
 /**
  * @brief 处理非法输入
 */
-void deal_invalid_input(ONE_GAME_t * const nowGame_t){
+void check_invalid_input(ONE_GAME_t * const nowGame_t){
     if(nowGame_t->playerFlag==BLACK_PLAYER){
-        if(nowGame_t->blackInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->blackInputChessPlace.col>=RANGE_OF_CHESSBOARD){
-            nowGame_t->blackInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
-            input_chess_place(nowGame_t);
-        }
-        if(nowGame_t->stateOfChessboard[nowGame_t->blackInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->blackInputChessPlace.col]!=NONE){
-            nowGame_t->blackInputChessPlace.flag=OCCUPYED;
-            input_chess_place(nowGame_t);
+        if(nowGame_t->blackInputChessPlace.flag==INPUT_UNUSED){
+            if(nowGame_t->blackInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->blackInputChessPlace.col>=RANGE_OF_CHESSBOARD){
+                nowGame_t->blackInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
+                // input_chess_place(nowGame_t);
+            }
+            if(nowGame_t->stateOfChessboard[nowGame_t->blackInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->blackInputChessPlace.col]!=NONE){
+                nowGame_t->blackInputChessPlace.flag=OCCUPYED;
+                // input_chess_place(nowGame_t);
+            }
         }
     }else if(nowGame_t->playerFlag==WHITE_PLAYER){
-        if(nowGame_t->whiteInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->whiteInputChessPlace.col>=RANGE_OF_CHESSBOARD){
-            nowGame_t->whiteInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
-            input_chess_place(nowGame_t);
-        }
-        if(nowGame_t->stateOfChessboard[nowGame_t->whiteInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->whiteInputChessPlace.col]!=NONE){
-            nowGame_t->whiteInputChessPlace.flag=OCCUPYED;
-            input_chess_place(nowGame_t);
+        if(nowGame_t->whiteInputChessPlace.flag==INPUT_UNUSED){
+            if(nowGame_t->whiteInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->whiteInputChessPlace.col>=RANGE_OF_CHESSBOARD){
+                nowGame_t->whiteInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
+                // input_chess_place(nowGame_t);
+            }
+            if(nowGame_t->stateOfChessboard[nowGame_t->whiteInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->whiteInputChessPlace.col]!=NONE){
+                nowGame_t->whiteInputChessPlace.flag=OCCUPYED;
+                // input_chess_place(nowGame_t);
+            }
         }
     }
 }
@@ -273,8 +277,17 @@ void deal_input(ONE_GAME_t * const nowGame_t,int8_t *row,int8_t *col){
         }
     }
     if(*col==-1||*row==0){
-        nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
-        input_chess_place(nowGame_t);
+        if(nowGame_t->playerFlag==BLACK_PLAYER){
+            nowGame_t->blackInputChessPlace.flag=INVALID_FORM;
+        }else{
+            nowGame_t->whiteInputChessPlace.flag=INVALID_FORM;
+        }
+    }else{
+        if(nowGame_t->playerFlag==BLACK_PLAYER){
+            nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
+        }else{
+            nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
+        }
     }
     *row=RANGE_OF_CHESSBOARD-*row;
 }
@@ -291,8 +304,10 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
                 deal_input(nowGame_t,&row,&col);
                 nowGame_t->blackInputChessPlace.row=row;
                 nowGame_t->blackInputChessPlace.col=col;
-                nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
-                deal_invalid_input(nowGame_t);
+                check_invalid_input(nowGame_t);
+                if(nowGame_t->blackInputChessPlace.flag<INPUT_UNUSED){
+                    input_chess_place(nowGame_t);
+                }
             }
         }else if(nowGame_t->blackInputChessPlace.flag<INPUT_UNUSED){
             switch(nowGame_t->blackInputChessPlace.flag){
@@ -309,8 +324,10 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
             deal_input(nowGame_t,&row,&col);
             nowGame_t->blackInputChessPlace.row=row;
             nowGame_t->blackInputChessPlace.col=col;
-            nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
-            deal_invalid_input(nowGame_t);
+            check_invalid_input(nowGame_t);
+            if(nowGame_t->blackInputChessPlace.flag<INPUT_UNUSED){
+                input_chess_place(nowGame_t);
+            }
         }
     }else if(nowGame_t->playerFlag==WHITE_PLAYER){
         if(nowGame_t->whiteInputChessPlace.flag==INPUT_USED){
@@ -319,8 +336,10 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
                 deal_input(nowGame_t,&row,&col);
                 nowGame_t->whiteInputChessPlace.row=row;
                 nowGame_t->whiteInputChessPlace.col=col;
-                nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
-                deal_invalid_input(nowGame_t);
+                check_invalid_input(nowGame_t);
+                if(nowGame_t->whiteInputChessPlace.flag<INPUT_UNUSED){
+                    input_chess_place(nowGame_t);
+                }
             }
         }else if(nowGame_t->whiteInputChessPlace.flag<INPUT_UNUSED){
             switch(nowGame_t->whiteInputChessPlace.flag){
@@ -337,8 +356,10 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
             deal_input(nowGame_t,&row,&col);
             nowGame_t->whiteInputChessPlace.row=row;
             nowGame_t->whiteInputChessPlace.col=col;
-            nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
-            deal_invalid_input(nowGame_t);
+            check_invalid_input(nowGame_t);
+            if(nowGame_t->whiteInputChessPlace.flag<INPUT_UNUSED){
+                input_chess_place(nowGame_t);
+            }
         }
     }
 }
@@ -423,6 +444,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
         }
     }
     //斜向搜索
+    countBlack=countWhite=0;
     if(lastRow>=lastCol){
         for(row=lastRow-lastCol,col=0;row<RANGE_OF_CHESSBOARD&& col<RANGE_OF_CHESSBOARD;row++,col++){
             if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
@@ -477,6 +499,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
         }
     }
      //斜向搜索
+    countBlack=countWhite=0;
     if(lastRow+lastCol>=RANGE_OF_CHESSBOARD-1){
         for(row=RANGE_OF_CHESSBOARD-1,col=lastRow+lastCol-(RANGE_OF_CHESSBOARD-1);row<RANGE_OF_CHESSBOARD&&col<RANGE_OF_CHESSBOARD;row--,col++){
             if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
@@ -808,7 +831,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
                 printf("WINNER:WHITE\n");
                 return;
             }
-            #ifdef ONLY_BLACK
+            #ifndef ONLY_BLACK
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 nowGame_t->playerFlag=WHITE_PLAYER;
             }else{
