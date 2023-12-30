@@ -4,7 +4,7 @@
 #include <stdlib.h> 
 
 #include "game.h"
-#include "AI.h"
+#include "main.h"
 
 /********************************绘制棋盘宏定义****************************************/
 #define CHESSBOARD_CORNER_1 "┓"
@@ -21,9 +21,6 @@
 #define WHITE_CHESS "◎"
 #define LAST_WHITE_CHESS "△"
 /***********************************************************************************/
-
-// #define CLEAR //打开则有清屏功能
-// #define ONLY_BLACKPLEAR //打开则只有黑棋玩家，用于实验禁手
 
 const int8_t direction[8]={0,1, 1,0, 1,1, 1,-1};//两个数一组描述4个方向，调用方式2n&2n+1(row&col)
 
@@ -300,7 +297,7 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
     if(nowGame_t->playerFlag==BLACK_PLAYER){
         if(nowGame_t->blackInputChessPlace.flag==INPUT_USED){
             if(nowGame_t->gameMode==PERSON_VS_PERSON||nowGame_t->gameMode==PERSON_VS_COMPUTER){
-                printf("please input the next place of black:x y\n");
+                printf("please input the next place of black\n");
                 deal_input(nowGame_t,&row,&col);
                 nowGame_t->blackInputChessPlace.row=row;
                 nowGame_t->blackInputChessPlace.col=col;
@@ -318,7 +315,7 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
                     printf("The chessboard can't be bigger. Please choose a right one.\n");
                     break;
                 case INVALID_FORM:
-                    printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"\n");
+                    printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"or quit\n");
                     break;
             }
             deal_input(nowGame_t,&row,&col);
@@ -332,7 +329,7 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
     }else if(nowGame_t->playerFlag==WHITE_PLAYER){
         if(nowGame_t->whiteInputChessPlace.flag==INPUT_USED){
             if(nowGame_t->gameMode==PERSON_VS_PERSON||nowGame_t->gameMode==COMPUTER_VS_PERSON){
-                printf("please input the next place of white:x y\n");
+                printf("please input the next place of white\n");
                 deal_input(nowGame_t,&row,&col);
                 nowGame_t->whiteInputChessPlace.row=row;
                 nowGame_t->whiteInputChessPlace.col=col;
@@ -350,7 +347,7 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
                     printf("The chessboard can't be bigger. Please choose a right one.\n");
                     break;
                 case INVALID_FORM:
-                    printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"\n");
+                    printf("Please input like \"a1\"or\"1a\"or\"A1\"or\"1A\"or quit\n");
                     break;
             }
             deal_input(nowGame_t,&row,&col);
@@ -733,11 +730,19 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
                 }
+            }else{
+                if(stateOfChess<FAKE_THREE){
+                    stateOfChess=FAKE_THREE;
+                }
             }
         }else if(samplingResult==0b110101110111){
             if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(2-count)*direction[2*directionChoice],col+(2-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND){
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
+                }
+            }else{
+                if(stateOfChess<FAKE_THREE){
+                    stateOfChess=FAKE_THREE;
                 }
             }
         }else if(samplingResult==0b110111010111){
@@ -745,11 +750,19 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
                 }
+            }else{
+                if(stateOfChess<FAKE_THREE){
+                    stateOfChess=FAKE_THREE;
+                }
             }
         }else if(samplingResult==0b111101010111){
             if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(4-count)*direction[2*directionChoice],col+(4-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND){
                 if(stateOfChess<LIVE_THREE){
                     stateOfChess=LIVE_THREE;
+                }
+            }else{
+                if(stateOfChess<FAKE_THREE){
+                    stateOfChess=FAKE_THREE;
                 }
             }
         }
@@ -827,7 +840,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
+            }else if(nowGame_t->gameWinner==WHITE_WINE){
                 printf("WINNER:WHITE\n");
                 return;
             }
@@ -857,7 +870,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else{
+            }else if(nowGame_t->gameWinner==WHITE_WINE){
                 printf("WINNER:WHITE\n");
                 return;
             }
@@ -885,7 +898,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else{
+            }else if(nowGame_t->gameWinner==WHITE_WINE){
                 printf("WINNER:WHITE\n");
                 return;
             }
