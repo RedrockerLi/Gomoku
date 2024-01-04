@@ -9,4 +9,6 @@ typedef struct
     int32_t scoreOfEveryPlace[RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD];
 }ONE_AI_t;
 
+
+
 #endif

@@ -4,7 +4,7 @@
 #include "game.h"
 
 void set_black(ONE_GAME_t *nowGame_t,uint8_t row,uint8_t col){
-    nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;
+    nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;
 }
 /***************************复杂禁手********************************************/
 // set_black(&classGame_t,5,5);

@@ -33,7 +33,7 @@ void gameInit(ONE_GAME_t * const nowGame_t){
     //棋盘初始化
     for(int8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
         for(int8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
-            nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=NONE;
+            nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
         }
     }
     //先手初始化
@@ -123,90 +123,90 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
     //第一列
     row=0,col=0;
     printf("%2d",RANGE_OF_CHESSBOARD-row);
-    switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+    switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
         case BLACK: printf("%s",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
+        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK; break;
         case NONE:printf("%s",CHESSBOARD_CORNER_2); break;
         case WHITE:printf("%s",WHITE_CHESS); break;
-        case LAST_WHITE: printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+        case LAST_WHITE: printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
     }
     //中间列
     for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
-        switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+        switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
             case BLACK:printf("%s",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
+            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK; break;
             case NONE:printf("%s",CHESSBOARD_UP); break;
             case WHITE:printf("%s",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         }
     }
     //最后列
-    switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+    switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
         case BLACK:printf("%s\n",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
+        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK; break;
         case NONE:printf("%s\n",CHESSBOARD_CORNER_1); break;
         case WHITE:printf("%s\n",WHITE_CHESS); break;
-        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
     }
     //中间行
     for(row=1;row<RANGE_OF_CHESSBOARD-1;row++){
         //第一列
         col=0;
         printf("%2d",RANGE_OF_CHESSBOARD-row);
-        switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+        switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
             case BLACK:printf("%s",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK; break;
+            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK; break;
             case NONE:printf("%s",CHESSBOARD_LEFT); break;
             case WHITE:printf("%s",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         }
         //中间列
         for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
-            switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+            switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
                 case BLACK:printf("%s",BLACK_CHESS); break;
-                case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
+                case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;break;
                 case NONE:printf("%s",CHESSBOARD_CENTER); break;
                 case WHITE:printf("%s",WHITE_CHESS); break;
-                case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+                case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
             }
         }
         //最后列
-        switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+        switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
             case BLACK:printf("%s\n",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
+            case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;break;
             case NONE:printf("%s\n",CHESSBOARD_RIGHT); break;
             case WHITE:printf("%s\n",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+            case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         }
     }
     //最后行
     //第一列
     col=0;
     printf("%2d",RANGE_OF_CHESSBOARD-row);
-    switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+    switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
         case BLACK:printf("%s",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
+        case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;break;
         case NONE:printf("%s",CHESSBOARD_CORNER_3); break;
         case WHITE:printf("%s",WHITE_CHESS); break;
-        case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+        case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
     }
     //中间列
     for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
-        switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+        switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
             case BLACK:printf("%s",BLACK_CHESS); break;
-            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
+            case LAST_BLACK:printf("%s",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;break;
             case NONE:printf("%s",CHESSBOARD_DOWN); break;
             case WHITE:printf("%s",WHITE_CHESS); break;
-            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+            case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         }   
     }
     //最后列
-    switch (nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]){
+    switch (nowGame_t->stateOfChessboard[MAT(row,col)]){
         case BLACK:printf("%s\n",BLACK_CHESS); break;
-        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=BLACK;break;
+        case LAST_BLACK:printf("%s\n",LAST_BLACK_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;break;
         case NONE:printf("%s\n",CHESSBOARD_CORNER_4); break;
         case WHITE:printf("%s\n",WHITE_CHESS); break;
-        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=WHITE; break;
+        case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
     }
     uint8_t i;
     printf(" ");
@@ -225,7 +225,7 @@ void check_invalid_input(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->blackInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->blackInputChessPlace.col>=RANGE_OF_CHESSBOARD){
                 nowGame_t->blackInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
             }
-            if(nowGame_t->stateOfChessboard[nowGame_t->blackInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->blackInputChessPlace.col]!=NONE){
+            if(nowGame_t->stateOfChessboard[MAT(nowGame_t->blackInputChessPlace.row,nowGame_t->blackInputChessPlace.col)]!=NONE){
                 nowGame_t->blackInputChessPlace.flag=OCCUPYED;
             }
         }
@@ -234,7 +234,7 @@ void check_invalid_input(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->whiteInputChessPlace.row>=RANGE_OF_CHESSBOARD||nowGame_t->whiteInputChessPlace.col>=RANGE_OF_CHESSBOARD){
                 nowGame_t->whiteInputChessPlace.flag=INDEX_OUT_OF_BOUNDS;
             }
-            if(nowGame_t->stateOfChessboard[nowGame_t->whiteInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->whiteInputChessPlace.col]!=NONE){
+            if(nowGame_t->stateOfChessboard[MAT(nowGame_t->whiteInputChessPlace.row,nowGame_t->whiteInputChessPlace.col)]!=NONE){
                 nowGame_t->whiteInputChessPlace.flag=OCCUPYED;
             }
         }
@@ -362,12 +362,12 @@ void input_chess_place(ONE_GAME_t * const nowGame_t){
 */
 void place_the_chess(ONE_GAME_t * const nowGame_t){
     if(nowGame_t->playerFlag==BLACK_PLAYER&&nowGame_t->blackInputChessPlace.flag==INPUT_UNUSED){
-        nowGame_t->stateOfChessboard[nowGame_t->blackInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->blackInputChessPlace.col]=LAST_BLACK;
+        nowGame_t->stateOfChessboard[MAT(nowGame_t->blackInputChessPlace.row,nowGame_t->blackInputChessPlace.col)]=LAST_BLACK;
         nowGame_t->lastBlackInputChessPlace.row=nowGame_t->blackInputChessPlace.row;
         nowGame_t->lastBlackInputChessPlace.col=nowGame_t->blackInputChessPlace.col;
         nowGame_t->blackInputChessPlace.flag=INPUT_USED;
     }else if(nowGame_t->playerFlag==WHITE_PLAYER&&nowGame_t->whiteInputChessPlace.flag==INPUT_UNUSED){
-        nowGame_t->stateOfChessboard[nowGame_t->whiteInputChessPlace.row*RANGE_OF_CHESSBOARD+nowGame_t->whiteInputChessPlace.col]=LAST_WHITE;
+        nowGame_t->stateOfChessboard[MAT(nowGame_t->whiteInputChessPlace.row,nowGame_t->whiteInputChessPlace.col)]=LAST_WHITE;
         nowGame_t->lastWhiteInputChessPlace.row=nowGame_t->whiteInputChessPlace.row;
         nowGame_t->lastWhiteInputChessPlace.col=nowGame_t->whiteInputChessPlace.col;
         nowGame_t->whiteInputChessPlace.flag=INPUT_USED;
@@ -384,11 +384,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     row=lastRow;
     countBlack=countWhite=0;
     for(col=0;col<RANGE_OF_CHESSBOARD;col++){
-        if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
+        if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
             countBlack++;
             countWhite=0;
             if(countBlack==5){
-                if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col+1]==BLACK){
+                if(nowGame_t->stateOfChessboard[MAT(row,col)+1]==BLACK){
                     if(mode==0){
                         printf("Long-Ladder Suicide!\n");
                     }
@@ -397,13 +397,13 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                     return BLACK_WINE;
                 }
             }
-        }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
+        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
             countBlack=0;
             countWhite++;
             if(countWhite==5){
                 return WHITE_WINE;
             }
-        }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
+        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
             countBlack=0;
             countWhite=0;
         }
@@ -412,11 +412,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     col=lastCol;
     countBlack=countWhite=0;
     for(row=0;row<RANGE_OF_CHESSBOARD;row++){
-        if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
+        if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
             countBlack++;
             countWhite=0;
             if(countBlack==5){
-                if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+col]==BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+1),col)]==BLACK){
                     if(mode==0){
                         printf("Long-Ladder Suicide!\n");
                     }
@@ -425,13 +425,13 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                     return BLACK_WINE;
                 }
             }
-        }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
+        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
             countBlack=0;
             countWhite++;
             if(countWhite==5){
                 return WHITE_WINE;
             }
-        }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
+        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
             countBlack=0;
             countWhite=0;
         }
@@ -440,11 +440,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     countBlack=countWhite=0;
     if(lastRow>=lastCol){
         for(row=lastRow-lastCol,col=0;row<RANGE_OF_CHESSBOARD&& col<RANGE_OF_CHESSBOARD;row++,col++){
-            if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -453,24 +453,24 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
                     return WHITE_WINE;
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
                 countBlack=0;
                 countWhite=0;
             }
         }
     }else{
         for(row=0,col=lastCol-lastRow;row<RANGE_OF_CHESSBOARD&& col<RANGE_OF_CHESSBOARD;row++,col++){
-            if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -479,13 +479,13 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
                     return WHITE_WINE;
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
                 countBlack=0;
                 countWhite=0;
             }
@@ -495,11 +495,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     countBlack=countWhite=0;
     if(lastRow+lastCol>=RANGE_OF_CHESSBOARD-1){
         for(row=RANGE_OF_CHESSBOARD-1,col=lastRow+lastCol-(RANGE_OF_CHESSBOARD-1);row<RANGE_OF_CHESSBOARD&&col<RANGE_OF_CHESSBOARD;row--,col++){
-            if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[(row-1)*RANGE_OF_CHESSBOARD+(col+1)]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row-1),(col+1))]==BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -508,24 +508,24 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
                     return WHITE_WINE;
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
                 countBlack=0;
                 countWhite=0;
             }
         }
     }else{
         for(row=0,col=lastRow+lastCol;row<RANGE_OF_CHESSBOARD&& col<RANGE_OF_CHESSBOARD;row++,col--){
-            if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[(row+1)*RANGE_OF_CHESSBOARD+(col-1)]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col-1))]==BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -534,13 +534,13 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
                     return WHITE_WINE;
                 }
-            }else if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
                 countBlack=0;
                 countWhite=0;
             }
@@ -563,36 +563,36 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         if(directionChoice==0){
             stdPlace=col;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
         }else if(directionChoice==1){
             stdPlace=row;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
         }else if(directionChoice==2){
             stdPlace=(row<col?row:col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
         }else{
             stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==BLACK||nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
@@ -601,36 +601,36 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         if(directionChoice==0){
             stdPlace=col;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
         }else if(directionChoice==1){
             stdPlace=row;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
         }else if(directionChoice==2){
             stdPlace=(row<col?row:col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
         }else{
             stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
-                }else if(nowGame_t->stateOfChessboard[(row+i*direction[2*directionChoice])*RANGE_OF_CHESSBOARD+(col+i*direction[2*directionChoice+1])]==NONE){
+                }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
                 }
             }
@@ -773,8 +773,8 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
 uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t mode){
     uint8_t forbiddenState=FORBIDDEN_HAND-1;
     uint8_t countThreeOrFour=0;
-    if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==NONE){
-        nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=TEMP_BLACK;
+    if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
+        nowGame_t->stateOfChessboard[MAT(row,col)]=TEMP_BLACK;
     }
     if(mode==1){
         forbiddenState=call_the_game(nowGame_t,row,col,1);
@@ -808,8 +808,8 @@ uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t co
             }
         }
     }
-    if(nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]==TEMP_BLACK){
-        nowGame_t->stateOfChessboard[row*RANGE_OF_CHESSBOARD+col]=NONE;
+    if(nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK){
+        nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
     }
     return forbiddenState;
 }
@@ -866,7 +866,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else if(nowGame_t->gameWinner==WHITE_WINE){
+            }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
                 printf("WINNER:WHITE\n");
                 return;
             }
@@ -883,7 +883,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
-                if(nowGame_t->gameWinner==CONTINUE){
+                if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
                     if(judge_forbidden_hand(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->blackInputChessPlace.col,0)==FORBIDDEN_HAND){
                         nowGame_t->gameWinner=WHITE_WINE;
                     }
@@ -894,7 +894,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else if(nowGame_t->gameWinner==WHITE_WINE){
+            }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
                 printf("WINNER:WHITE\n");
                 return;
             }
