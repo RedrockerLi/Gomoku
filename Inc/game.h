@@ -23,8 +23,10 @@ enum STATE_OF_GAME_E{
     BLACK, //棋盘是黑子
     LAST_BLACK, //刚刚落下的黑子
     TEMP_BLACK, //判断复杂禁手时落下的临时黑子
+    AI_BLACK, //AI落下的临时黑子
     NONE,
     WHITE,
+    AI_WHITE,
     LAST_WHITE,
 
     BLACK_PLAYER, //游戏玩家
@@ -47,12 +49,16 @@ enum STATE_OF_CHASS_E{
     TWO_0B,
     TWO_1B,
     TWO_2B,
+    THREE_JUMP2,
+    LIVE_THREE_JUMP1,
+    FIGHT_THREE_JUMP1,
     FAKE_THREE,
     LIVE_THREE,
+    JUMP_FOUR,
     FIGHT_FOUR,
     LIVE_FOUR,
-    FORBIDDEN_HAND,
     LENGTH_OF_STATES,
+    FORBIDDEN_HAND,
 };
 
 typedef struct 

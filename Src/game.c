@@ -553,7 +553,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
  * @brief 判断棋子状态
  * @param direction 范围{0-3}表示4个方向
  * @param stdChess 下在（row,col）的棋子类型
- * @param mode 控制模式|0,1:3+4|2:检测所有类型|
+ * @param mode 控制模式|0,1:3+4|2:检测所有类型,不包括禁手|
 */
 uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, const uint8_t col,const uint8_t stdChess,const uint8_t directionChoice,uint8_t mode){
     uint32_t lineToJudge=0; //两位一组，00为不可落子，11为空，01为和stdchess相同,相同方向没有特殊要求
@@ -687,6 +687,10 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                 if(stateOfChess<TWO_JUMP3){
                     stateOfChess=TWO_JUMP3;
                 }
+            }else if(samplingResult==0b0111010101||samplingResult==0b0111011101||samplingResult==0b0101111101){
+                if(stateOfChess<THREE_JUMP2){
+                    stateOfChess=THREE_JUMP2;
+                }
             }
         }
     }
@@ -697,29 +701,46 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }else{
             samplingResult=(lineToJudge&window)>>((stdPlace-count)*2);
         }
+        if(mode==2){
+            if(samplingResult==0b110111010111||samplingResult==0b110101110111){
+                if(stateOfChess<LIVE_THREE_JUMP1){
+                    stateOfChess=LIVE_THREE_JUMP1;
+                }
+            }else if(samplingResult==0b110111010100||samplingResult==0b110101110100||samplingResult==0b000111010111||samplingResult==0b000101110111){
+                if(stateOfChess<FIGHT_THREE_JUMP1){
+                    stateOfChess=FIGHT_THREE_JUMP1;
+                }
+            }
+        }
         if(samplingResult==0b110101010111){
             if(stateOfChess<LIVE_FOUR){
                 stateOfChess=LIVE_FOUR;
             }
-            fourCount++;
-            if(fourCount==2){
-                return FORBIDDEN_HAND;
+            if(mode!=2){
+                fourCount++;
+                if(fourCount==2){
+                    return FORBIDDEN_HAND;
+                }
             }
         }else if(samplingResult==0b000101010111||samplingResult==0b110101010100||samplingResult==0b011101010100||samplingResult==0b011101010111){
             if(stateOfChess<FIGHT_FOUR){
                 stateOfChess=FIGHT_FOUR;
             }
-            fourCount++;
-            if(fourCount==2){
-                return FORBIDDEN_HAND;
+            if(mode!=2){
+                fourCount++;
+                if(fourCount==2){
+                    return FORBIDDEN_HAND;
+                }   
             }
         }else if(count!=0&&(samplingResult>>2==0b0101011101||samplingResult>>2==0b0101110101)){
             if(stateOfChess<FIGHT_FOUR){
                 stateOfChess=FIGHT_FOUR;
             }
-            fourCount++;
-            if(fourCount==2){
-                return FORBIDDEN_HAND;
+            if(mode!=2){
+                fourCount++;
+                if(fourCount==2){
+                    return FORBIDDEN_HAND;
+                }
             }
         }else if(samplingResult==0b110101011111){
             if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(1-count)*direction[2*directionChoice],col+(1-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND){
@@ -772,7 +793,8 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
 */
 uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t mode){
     uint8_t forbiddenState=FORBIDDEN_HAND-1;
-    uint8_t countThreeOrFour=0;
+    uint8_t countThree=0;
+    uint8_t countFour=0;
     if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
         nowGame_t->stateOfChessboard[MAT(row,col)]=TEMP_BLACK;
     }
@@ -781,25 +803,26 @@ uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t co
     }
     if(forbiddenState!=FORBIDDEN_HAND){
         for(int i=0;i<4;i++){
-            if(judge_state_of_chess(nowGame_t,row,col,BLACK,i,mode)==LIVE_THREE){
-                countThreeOrFour++;
+            uint8_t ansOfJudgeStateOfChess=judge_state_of_chess(nowGame_t,row,col,BLACK,i,mode);
+            if(ansOfJudgeStateOfChess==FORBIDDEN_HAND){
+                if(mode==0){
+                    printf("Four-Four Forbidden!\n");
+                }
+                forbiddenState=FORBIDDEN_HAND;
+                break;
             }
-            if(countThreeOrFour==2){
+            if(ansOfJudgeStateOfChess==LIVE_THREE){
+                countThree++;
+            }else if(ansOfJudgeStateOfChess==LIVE_FOUR||ansOfJudgeStateOfChess==FIGHT_FOUR){
+                countFour++;
+            }
+            if(countThree==2){
                 if(mode==0){
                     printf("Three-Three Forbidden!\n");
                 }
                 forbiddenState=FORBIDDEN_HAND;
                 break;
-            }
-        }
-    }
-    if(forbiddenState!=FORBIDDEN_HAND){
-        countThreeOrFour=0;
-        for(int i=0;i<4;i++){
-            if(judge_state_of_chess(nowGame_t,row,col,BLACK,i,mode)==LIVE_FOUR||judge_state_of_chess(nowGame_t,row,col,BLACK,i,0)==FIGHT_FOUR){
-                countThreeOrFour++;
-            }
-            if(countThreeOrFour==2){
+            }else if(countFour==2){
                 if(mode==0){
                     printf("Four-Four Forbidden!\n");
                 }
