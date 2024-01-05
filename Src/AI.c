@@ -3,6 +3,7 @@
 #include "AI.h"
 #include "game.h"
 #include "main.h"
+#include "thpool.h"
 
 #define MIN_OF_INT32 -2147483648
 #define MAX_OF_INT32 2147483647

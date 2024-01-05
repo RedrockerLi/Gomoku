@@ -20,18 +20,22 @@ void set_black(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
 // set_black(&classGame_t,15,0);
 // set_black(&classGame_t,14,0);
 // set_black(&classGame_t,13,0);
-/****************************测试AI下棋时间********************************************/
+
 
 int main(){
     #ifdef GAME
-    // ONE_GAME_t classGame_t;
-    // ONE_AI_t classAI_t;
-    // game_init(&classGame_t);
-    // draw_the_start_page();
-    // input_game_mode(&classGame_t);
-    // draw_the_chessboard(&classGame_t);
-    // continue_the_game(&classGame_t,&classAI_t);
+    ONE_GAME_t classGame_t;
+    ONE_AI_t classAI_t;
+    const int32_t scoreChoose[LENGTH_OF_STATES]={5,10,20,15,20,30,60,100,50,1000,500,10000,20000,30000,60000,80000};
+    AI_init(&classAI_t,scoreChoose);
+    game_init(&classGame_t);
+    draw_the_start_page();
+    input_game_mode(&classGame_t);
+    draw_the_chessboard(&classGame_t);
+    continue_the_game(&classGame_t,&classAI_t);
 
+    #endif
+    #ifdef TEST_TIME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
     const int32_t scoreChoose[LENGTH_OF_STATES]={5,10,20,15,20,30,60,100,50,1000,500,10000,20000,30000,60000,80000};
