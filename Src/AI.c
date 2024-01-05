@@ -8,8 +8,8 @@
 #define MIN_OF_INT32 -2147483648
 #define MAX_OF_INT32 2147483647
 
-#define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-#define NUM_OF_CHILDREN 200 //每一层搜索的子节点数量
+#define MAX_DEPTH_OF_ALPHA_BETA 2 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+#define NUM_OF_CHILDREN 4 //每一层搜索的子节点数量
 
 #define MAX(a,b) a>b?a:b
 #define MIN(a,b) a<b?a:b
@@ -247,66 +247,29 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
 /**
  * @brief 下一手棋
 */
-// void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
-//     int32_t nowMax=MIN_OF_INT32;
-//     TO_CHECK_t greatChildrenGroup[NUM_OF_CHILDREN];
-//     if(nowGame_t->playerFlag==BLACK_PLAYER){
-//         fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1);
-//         for(uint8_t i=0;i<NUM_OF_CHILDREN;i++){
-//             nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,greatChildrenGroup[i].row,greatChildrenGroup[i].col);
-//             if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]){
-//                 nowMax=nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)];
-//                 nowGame_t->blackInputChessPlace.row=greatChildrenGroup[i].row;
-//                 nowGame_t->blackInputChessPlace.col=greatChildrenGroup[i].col;
-//             }   
-//         }
-//         nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
-//     }else{
-//         fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1);
-//         for(uint8_t i=0;i<NUM_OF_CHILDREN;i++){
-//             nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,greatChildrenGroup[i].row,greatChildrenGroup[i].col);
-//             if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]){
-//                 nowMax=nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)];
-//                 nowGame_t->whiteInputChessPlace.row=greatChildrenGroup[i].row;
-//                 nowGame_t->whiteInputChessPlace.col=greatChildrenGroup[i].col;
-//             }   
-//         }
-//         nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
-//     }
-// }
-
 void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
     int32_t nowMax=MIN_OF_INT32;
+    TO_CHECK_t greatChildrenGroup[NUM_OF_CHILDREN];
     if(nowGame_t->playerFlag==BLACK_PLAYER){
-        for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
-            for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
-                if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
-                    if(judge_forbidden_hand(nowGame_t,row,col,1)==FORBIDDEN_HAND){
-                        nowAI_t->scoreOfEveryPlace[MAT(row,col)]=MIN_OF_INT32;
-                        continue;
-                    }
-                    nowAI_t->scoreOfEveryPlace[MAT(row,col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,row,col);
-                    if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(row,col)]){
-                        nowMax=nowAI_t->scoreOfEveryPlace[MAT(row,col)];
-                        nowGame_t->blackInputChessPlace.row=row;
-                        nowGame_t->blackInputChessPlace.col=col;
-                    }
-                }
-            }
+        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1);
+        for(uint8_t i=0;i<NUM_OF_CHILDREN;i++){
+            nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,greatChildrenGroup[i].row,greatChildrenGroup[i].col);
+            if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]){
+                nowMax=nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)];
+                nowGame_t->blackInputChessPlace.row=greatChildrenGroup[i].row;
+                nowGame_t->blackInputChessPlace.col=greatChildrenGroup[i].col;
+            }   
         }
         nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
     }else{
-        for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
-            for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
-                if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
-                    nowAI_t->scoreOfEveryPlace[MAT(row,col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,row,col);
-                    if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(row,col)]){
-                        nowMax=nowAI_t->scoreOfEveryPlace[MAT(row,col)];
-                        nowGame_t->whiteInputChessPlace.row=row;
-                        nowGame_t->whiteInputChessPlace.col=col;
-                    }
-                }
-            }
+        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1);
+        for(uint8_t i=0;i<NUM_OF_CHILDREN;i++){
+            nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,greatChildrenGroup[i].row,greatChildrenGroup[i].col);
+            if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)]){
+                nowMax=nowAI_t->scoreOfEveryPlace[MAT(greatChildrenGroup[i].row,greatChildrenGroup[i].col)];
+                nowGame_t->whiteInputChessPlace.row=greatChildrenGroup[i].row;
+                nowGame_t->whiteInputChessPlace.col=greatChildrenGroup[i].col;
+            }   
         }
         nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
     }
