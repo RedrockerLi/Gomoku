@@ -179,4 +179,4 @@ function alphabeta(node, depth, α, β, maximizingPlayer) // node = 节点，dep
 ## 多线程
 采用[线程池](https://github.com/Pithikos/C-Thread-Pool)进行多线程管理.
 
-把搜索任务分解为一个一个点,由64条线程同步进行,理论上搜索深度为3回合时可以把搜索范围扩大一倍.(靠多线程增加搜索深度不可行,因为计算量随深度指数上升)
+把搜索任务分解为一个一个点,由15条线程同步进行.
