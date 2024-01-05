@@ -1,5 +1,6 @@
 #ifndef _MAIN_H
 #define _MAIN_H
+#include <stdint.h>
 
 #define GAME        //比赛模式
 // #define TRAIN    //训练模式

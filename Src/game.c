@@ -4,6 +4,7 @@
 #include <stdlib.h> 
 
 #include "game.h"
+#include "AI.h"
 #include "main.h"
 
 /********************************绘制棋盘宏定义****************************************/
@@ -29,7 +30,7 @@ void input_chess_place(ONE_GAME_t * const nowGame_t);
 /**
  * @brief 初始化游戏
 */
-void gameInit(ONE_GAME_t * const nowGame_t){
+void game_init(ONE_GAME_t * const nowGame_t){
     //棋盘初始化
     for(int8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
         for(int8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
@@ -563,7 +564,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         if(directionChoice==0){
             stdPlace=col;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -572,7 +573,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }else if(directionChoice==1){
             stdPlace=row;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -581,7 +582,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }else if(directionChoice==2){
             stdPlace=(row<col?row:col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -590,7 +591,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }else{
             stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_BLACK){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -601,7 +602,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         if(directionChoice==0){
             stdPlace=col;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -610,7 +611,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }else if(directionChoice==1){
             stdPlace=row;
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -619,7 +620,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }else if(directionChoice==2){
             stdPlace=(row<col?row:col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -628,7 +629,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
         }else{
             stdPlace=(row<RANGE_OF_CHESSBOARD-col?row:RANGE_OF_CHESSBOARD-col);
             for(int8_t i=-stdPlace;row+i*direction[2*directionChoice]<RANGE_OF_CHESSBOARD&&col+i*direction[2*directionChoice+1]<RANGE_OF_CHESSBOARD;i++,count++){
-                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE){
+                if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==WHITE||nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==AI_WHITE){
                     lineToJudge=lineToJudge+(0b01<<(count*2));
                 }else if(nowGame_t->stateOfChessboard[MAT((row+i*direction[2*directionChoice]),(col+i*direction[2*directionChoice+1]))]==NONE){
                     lineToJudge=lineToJudge+(0b11<<(count*2));
@@ -793,8 +794,6 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
 */
 uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t mode){
     uint8_t forbiddenState=FORBIDDEN_HAND-1;
-    uint8_t countThree=0;
-    uint8_t countFour=0;
     if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
         nowGame_t->stateOfChessboard[MAT(row,col)]=TEMP_BLACK;
     }
@@ -802,6 +801,8 @@ uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t co
         forbiddenState=call_the_game(nowGame_t,row,col,1);
     }
     if(forbiddenState!=FORBIDDEN_HAND){
+        uint8_t countThree=0;
+        uint8_t countFour=0;
         for(int i=0;i<4;i++){
             uint8_t ansOfJudgeStateOfChess=judge_state_of_chess(nowGame_t,row,col,BLACK,i,mode);
             if(ansOfJudgeStateOfChess==FORBIDDEN_HAND){
@@ -840,7 +841,7 @@ uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t co
 /** 
  * @brief 继续游戏直到结束
 */
-void continue_the_game(ONE_GAME_t * const nowGame_t){
+void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
     if(nowGame_t->gameMode==PERSON_VS_PERSON){
         while (nowGame_t->gameWinner==CONTINUE){
             input_chess_place(nowGame_t);
@@ -873,7 +874,11 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
         }
     }else if(nowGame_t->gameMode==PERSON_VS_COMPUTER){
         while (nowGame_t->gameWinner==CONTINUE){
-            input_chess_place(nowGame_t);
+            if(nowGame_t->playerFlag==BLACK_PLAYER){
+                input_chess_place(nowGame_t);
+            }else{
+                calc_next_input(nowGame_t,nowAI_t);
+            }
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
@@ -889,7 +894,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
+            }else if(nowGame_t->gameWinner==WHITE_WINE){
                 printf("WINNER:WHITE\n");
                 return;
             }
@@ -901,12 +906,16 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
         }
     }else if(nowGame_t->gameMode==COMPUTER_VS_PERSON){
         while (nowGame_t->gameWinner==CONTINUE){
-            input_chess_place(nowGame_t);
+            if(nowGame_t->playerFlag==WHITE_PLAYER){
+                input_chess_place(nowGame_t);
+            }else{
+                calc_next_input(nowGame_t,nowAI_t);
+            }
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
-                if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
+                if(nowGame_t->gameWinner==CONTINUE){
                     if(judge_forbidden_hand(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->blackInputChessPlace.col,0)==FORBIDDEN_HAND){
                         nowGame_t->gameWinner=WHITE_WINE;
                     }
@@ -917,7 +926,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t){
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
+            }else if(nowGame_t->gameWinner==WHITE_WINE){
                 printf("WINNER:WHITE\n");
                 return;
             }

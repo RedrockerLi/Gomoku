@@ -1,11 +1,13 @@
 #include <stdint.h>
 
 #include "AI.h"
+#include "game.h"
+#include "main.h"
 
 #define MIN_OF_INT32 -2147483648
 #define MAX_OF_INT32 2147483647
 
-#define MAX_DEPTH_OF_ALPHA_BETA 4 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+#define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
 
 #define MAX(a,b) a>b?a:b
 #define MIN(a,b) a<b?a:b
@@ -35,13 +37,13 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
             uint8_t callTheGameAns=0;
             callTheGameAns=call_the_game(nowGame_t,row,col,1);
             if(callTheGameAns==BLACK_WINE){
-                if(nowGame_t->playerFlag=BLACK_PLAYER){
+                if(nowGame_t->playerFlag==BLACK_PLAYER){
                     return MAX_OF_INT32;
                 }else{
                     return MIN_OF_INT32;
                 }
             }else if(callTheGameAns==WHITE_WINE){
-                if(nowGame_t->playerFlag=BLACK_PLAYER){
+                if(nowGame_t->playerFlag==BLACK_PLAYER){
                     return MIN_OF_INT32;
                 }else{
                     return MAX_OF_INT32;
@@ -62,7 +64,7 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
             }
         }
     }
-    if(nowGame_t->playerFlag=BLACK_PLAYER){
+    if(nowGame_t->playerFlag==BLACK_PLAYER){
         return valueOfAll;
     }else{
         return -valueOfAll;
@@ -99,7 +101,7 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
     if(ansOfCallTheGame!=CONTINUE){
         if((depth+1)%2==0){//[对方的棋]
             if(nowGame_t->playerFlag==BLACK){//检查
-                if(ansOfCallTheGame==WHITE_WINE){
+                if(ansOfCallTheGame==WHITE_WINE||ansOfCallTheGame==FORBIDDEN_HAND){
                     scoreOfChild=MIN_OF_INT32;
                 }
             }else{
@@ -113,7 +115,7 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
                     scoreOfChild=MAX_OF_INT32;
                 }
             }else{
-                if(ansOfCallTheGame==WHITE_WINE){
+                if(ansOfCallTheGame==WHITE_WINE||ansOfCallTheGame==FORBIDDEN_HAND){
                     scoreOfChild=MAX_OF_INT32;
                 }
             }
@@ -129,14 +131,14 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
                 for(row=0,flag=1;flag=1&&row<RANGE_OF_CHESSBOARD;row++){
                     for(col=0;flag==1&&col<RANGE_OF_CHESSBOARD;col++){
                         if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
-                            if(nowGame_t->playerFlag==WHITE_PLAYER){ //检查
+                            if(nowGame_t->playerFlag==WHITE_PLAYER){
                                 if(judge_forbidden_hand(nowGame_t,row,col,1)==FORBIDDEN_HAND){
                                     continue;
                                 }
                             }
                             scoreOfChild=MIN(scoreOfChild,alpha_beta_pruning(nowGame_t,nowAI_t,depth-1,alpha,beta,row,col));
                             beta=MIN(beta,scoreOfChild);
-                            if(beta<=alpha){
+                            if(beta<=alpha||scoreOfChild==MIN_OF_INT32){
                                 flag=0; //跳出两层循环
                             }
                         }
@@ -155,7 +157,7 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
                             }
                             scoreOfChild=MAX(scoreOfChild,alpha_beta_pruning(nowGame_t,nowAI_t,depth-1,alpha,beta,row,col));
                             beta=MAX(beta,scoreOfChild);
-                            if(beta<=alpha){
+                            if(beta<=alpha||scoreOfChild==MAX_OF_INT32){
                                 flag=0;
                             }
                         }
@@ -168,4 +170,44 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
         nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=NONE;
     }
     return scoreOfChild;
+}
+
+/**
+ * @brief 下一手棋
+*/
+void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
+    int32_t nowMax=MIN_OF_INT32;
+    if(nowGame_t->playerFlag==BLACK_PLAYER){
+        for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
+            for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+                if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
+                    if(judge_forbidden_hand(nowGame_t,row,col,1)==FORBIDDEN_HAND){
+                        nowAI_t->scoreOfEveryPlace[MAT(row,col)]=MIN_OF_INT32;
+                        continue;
+                    }
+                    nowAI_t->scoreOfEveryPlace[MAT(row,col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,row,col);
+                    if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(row,col)]){
+                        nowMax=nowAI_t->scoreOfEveryPlace[MAT(row,col)];
+                        nowGame_t->blackInputChessPlace.row=row;
+                        nowGame_t->blackInputChessPlace.col=col;
+                    }
+                }
+            }
+        }
+        nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
+    }else{
+        for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
+            for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+                if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
+                    nowAI_t->scoreOfEveryPlace[MAT(row,col)]=alpha_beta_pruning(nowGame_t,nowAI_t,MAX_DEPTH_OF_ALPHA_BETA,MIN_OF_INT32,MAX_OF_INT32,row,col);
+                    if(nowMax<nowAI_t->scoreOfEveryPlace[MAT(row,col)]){
+                        nowMax=nowAI_t->scoreOfEveryPlace[MAT(row,col)];
+                        nowGame_t->whiteInputChessPlace.row=row;
+                        nowGame_t->whiteInputChessPlace.col=col;
+                    }
+                }
+            }
+        }
+        nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
+    }
 }
