@@ -9,7 +9,7 @@
 #define MAX_OF_INT32 2147483647
 
 #define MAX_DEPTH_OF_ALPHA_BETA 2 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-#define NUM_OF_CHILDREN 10 //每一层搜索的子节点数量
+#define NUM_OF_CHILDREN 4 //每一层搜索的子节点数量
 
 #define MAX(a,b) a>b?a:b
 #define MIN(a,b) a<b?a:b
