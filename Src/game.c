@@ -879,6 +879,10 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
             }else{
                 calc_next_input(nowGame_t,nowAI_t);
             }
+            #ifdef TEST_TIME
+                exit(0);
+            #endif
+
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
