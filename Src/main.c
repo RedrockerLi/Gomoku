@@ -1,4 +1,8 @@
 #include <stdio.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "AI.h"
 #include "game.h"
@@ -23,6 +27,24 @@ void set_black(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
 
 
 int main(){
+    #ifdef SHOW_INPUT
+    // #define BUFF 1024
+    // uint8_t fileBuf[BUFF];
+    // uint16_t size;
+    // int file;
+    // if((file=open("input",O_RDONLY))==-1){
+    //     printf("Error.Cannot find file input\n");
+    //     return 1;
+    // }
+    // size=read(file,fileBuf,BUFF);
+    // close(file);
+    // fileBuf[size]='\0';
+    // printf("%s",fileBuf);
+
+    printf("作者:李承昱\n");
+
+    #endif
+
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
