@@ -2,9 +2,9 @@
  * Author:       Johan Hanssen Seferidis
  * License:	     MIT
  * Description:  Library providing a threading pool where you can add
- *               work. For usage, check the thpool.h file or README.md
+ *               work. For usage, check the threadPool.h file or README.md
  *
- *//** @file thpool.h *//*
+ *//** @file threadPool.h *//*
  *
  ********************************/
 
@@ -32,7 +32,7 @@
 #include <pthread_np.h>
 #endif
 
-#include "thpool.h"
+#include "threadPool.h"
 
 #ifdef THPOOL_DEBUG
 #define THPOOL_DEBUG 1

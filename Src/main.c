@@ -9,6 +9,7 @@
 #include "AI.h"
 #include "game.h"
 #include "main.h"
+#include "threadPool.h"
 
 /**
  * @brief 在棋盘放黑子
@@ -76,6 +77,10 @@ int main(){
     output_log("runningLog","Begin:");
     output_log("runningLog",timeString);
     #endif
+    #ifdef THREAD_POOL
+    #define NUM_OF_THREAD 16
+    threadpool thpoolForAI=thpool_init(NUM_OF_THREAD);
+    #endif
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
@@ -85,7 +90,11 @@ int main(){
     draw_the_start_page();
     input_game_mode(&classGame_t);
     draw_the_chessboard(&classGame_t);
+    #ifndef THREAD_POOL
     continue_the_game(&classGame_t,&classAI_t);
+    #else
+    continue_the_game(&classGame_t,&classAI_t,&thpoolForAI);
+    #endif
     #endif
     #ifdef TEST_TIME
     ONE_GAME_t classGame_t;
@@ -97,7 +106,11 @@ int main(){
     classGame_t.gameMode=PERSON_VS_COMPUTER;
     classGame_t.playerFlag=WHITE_PLAYER;
     draw_the_chessboard(&classGame_t);
+    #ifndef THREAD_POOL
     continue_the_game(&classGame_t,&classAI_t);
+    #else
+    continue_the_game(&classGame_t,&classAI_t,&thpoolForAI);
+    #endif
     #endif
     #ifdef LOG
     output_log("runningLog","Exit:");

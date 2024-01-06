@@ -7,6 +7,7 @@
 #include "game.h"
 #include "AI.h"
 #include "main.h"
+#include "threadPool.h"
 
 /********************************绘制棋盘宏定义****************************************/
 #define CHESSBOARD_CORNER_1 "┓"
@@ -48,7 +49,7 @@ void game_init(ONE_GAME_t * const nowGame_t){
         }
     }
     if(flag==0){
-        output_log("runningLog","Error:game_init->nowGame_t->stateOfChessboard[MAT(row,col)]=NONE\n");
+        output_log("runningLog","Error:game_init\n");
     }
     #endif
     //先手初始化
@@ -855,7 +856,11 @@ uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t co
 /** 
  * @brief 继续游戏直到结束
 */
+#ifndef THREAD_POOL
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
+#else
+void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI){
+#endif
     if(nowGame_t->gameMode==PERSON_VS_PERSON){
         while (nowGame_t->gameWinner==CONTINUE){
             input_chess_place(nowGame_t);
@@ -891,7 +896,11 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
+                #ifndef THREAD_POOL
                 calc_next_input(nowGame_t,nowAI_t);
+                #else
+                calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
+                #endif
             }
             #ifdef TEST_TIME
                 #ifdef LOG
@@ -934,7 +943,11 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
             if(nowGame_t->playerFlag==WHITE_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
+                #ifndef THREAD_POOL
                 calc_next_input(nowGame_t,nowAI_t);
+                #else
+                calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
+                #endif
             }
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);

@@ -179,4 +179,4 @@ function alphabeta(node, depth, α, β, maximizingPlayer) // node = 节点，dep
 ## 多线程
 采用[线程池](https://github.com/Pithikos/C-Thread-Pool)进行多线程管理.
 
-把搜索任务分解为一个一个点,由15条线程同步进行.
+因为计算时会改变棋盘等信息,所以每一条线程的数据应该是独立的.
