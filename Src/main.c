@@ -1,13 +1,18 @@
 #include <stdio.h>
+#include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "AI.h"
 #include "game.h"
 #include "main.h"
 
+/**
+ * @brief 在棋盘放黑子
+*/
 void set_black(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
     nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;
 }
@@ -25,23 +30,41 @@ void set_black(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
 // set_black(&classGame_t,14,0);
 // set_black(&classGame_t,13,0);
 
+/**
+ * @brief 日志输出
+*/
+void output_log(uint8_t *output){
+    int file;
+    if((file=open("runningLog",O_WRONLY|O_APPEND))==-1){
+        printf("Error.Cannot creat file runningLog\n");
+    }
+    write(file,output,strlen(output));
+    close(file);
+}
 
 int main(){
     #ifdef SHOW_INPUT
-    // #define BUFF 1024
-    // uint8_t fileBuf[BUFF];
-    // uint16_t size;
-    // int file;
-    // if((file=open("input",O_RDONLY))==-1){
-    //     printf("Error.Cannot find file input\n");
-    //     return 1;
-    // }
-    // size=read(file,fileBuf,BUFF);
-    // close(file);
-    // fileBuf[size]='\0';
-    // printf("%s",fileBuf);
+    #define BUFF 1024
+    uint8_t fileBuf[BUFF];
+    uint16_t size;
+    int file;
+    if((file=open("input",O_RDONLY))==-1){
+        printf("Error.Cannot find file input\n");
+        return 1;
+    }
+    size=read(file,fileBuf,BUFF);
+    fileBuf[size]='\0';
+    close(file);
+    printf("%s",fileBuf);
 
-    printf("作者:李承昱\n");
+    #endif
+
+    #ifdef LOG
+    time_t currentTime;
+    time(&currentTime);
+    uint8_t *timeString = ctime(&currentTime);
+    output_log("Begin at:");
+    output_log(timeString);
 
     #endif
 
@@ -57,6 +80,7 @@ int main(){
     continue_the_game(&classGame_t,&classAI_t);
 
     #endif
+
     #ifdef TEST_TIME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;

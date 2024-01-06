@@ -32,8 +32,9 @@ void input_chess_place(ONE_GAME_t * const nowGame_t);
 */
 void game_init(ONE_GAME_t * const nowGame_t){
     //棋盘初始化
-    for(int8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
-        for(int8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+    for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
+        for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+            // printf("%d\n",MAT(row,col));
             nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
         }
     }
@@ -893,6 +894,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
                     }
                 }
             }else{
+                printf("AI output:%c%d\n",'A'+nowGame_t->whiteInputChessPlace.col,15-nowGame_t->whiteInputChessPlace.row);
                 nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col,0);
             }
             if(nowGame_t->gameWinner==BLACK_WINE){
@@ -918,12 +920,8 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
+                printf("AI output:%c%d\n",'A'+nowGame_t->blackInputChessPlace.col,15-nowGame_t->blackInputChessPlace.row);
                 nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
-                if(nowGame_t->gameWinner==CONTINUE){
-                    if(judge_forbidden_hand(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->blackInputChessPlace.col,0)==FORBIDDEN_HAND){
-                        nowGame_t->gameWinner=WHITE_WINE;
-                    }
-                }
             }else{
                 nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col,0);
             }

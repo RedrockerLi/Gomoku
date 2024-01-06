@@ -1,5 +1,6 @@
 /Build
 /.vscode
 main
-/Src/input
-/valReport
+input
+runningLog
+valReport
