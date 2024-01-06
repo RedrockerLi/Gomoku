@@ -92,9 +92,7 @@ typedef struct
     int32_t scoreOfChessStates[LENGTH_OF_STATES];
     int32_t scoreOfEveryPlace[RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD];
 }ONE_AI_t;
-
 #endif
-
 void game_init(ONE_GAME_t * const nowGame_t);
 void draw_the_start_page(void);
 void input_game_mode(ONE_GAME_t * const nowGame_t);
@@ -103,5 +101,4 @@ uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t co
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t);
 uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastCol,uint8_t mode);
 uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, const uint8_t col,const uint8_t stdChess,const uint8_t directionChoice,uint8_t mode);
-
 #endif

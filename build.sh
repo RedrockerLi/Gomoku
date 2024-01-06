@@ -1,5 +1,4 @@
 rm main
->runningLog 
 cd Build
 cmake ..
 make 

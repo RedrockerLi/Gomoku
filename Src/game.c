@@ -2,6 +2,7 @@
 #include <stdint.h>
 #include <string.h>
 #include <stdlib.h> 
+#include <time.h>
 
 #include "game.h"
 #include "AI.h"
@@ -34,10 +35,22 @@ void game_init(ONE_GAME_t * const nowGame_t){
     //棋盘初始化
     for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
         for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
-            // printf("%d\n",MAT(row,col));
             nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
         }
     }
+    #ifdef LOG
+    uint8_t flag=1;
+    for(uint8_t row=0;flag==1&&row<RANGE_OF_CHESSBOARD;row++){
+        for(uint8_t col=0;flag==1&&col<RANGE_OF_CHESSBOARD;col++){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]!=NONE){
+                flag=0;
+            }
+        }
+    }
+    if(flag==0){
+        output_log("runningLog","Error:game_init->nowGame_t->stateOfChessboard[MAT(row,col)]=NONE\n");
+    }
+    #endif
     //先手初始化
     nowGame_t->playerFlag=BLACK_PLAYER;
     //落子接口初始化
@@ -881,9 +894,15 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
                 calc_next_input(nowGame_t,nowAI_t);
             }
             #ifdef TEST_TIME
+                #ifdef LOG
+                output_log("runningLog","Exit:");
+                time_t currentTime;
+                time(&currentTime);
+                uint8_t *timeString = ctime(&currentTime);
+                output_log("runningLog",timeString);
+                #endif
                 exit(0);
             #endif
-
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
