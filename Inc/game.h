@@ -101,7 +101,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t);
 uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t mode);
 uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastCol,uint8_t mode);
 uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, const uint8_t col,const uint8_t stdChess,const uint8_t directionChoice,uint8_t mode);
-#ifndef THREAD_POOL
+#ifndef THREAD_POOL_FOR_AI
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t);
 #else
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI);

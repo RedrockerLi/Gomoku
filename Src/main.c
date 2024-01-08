@@ -113,20 +113,20 @@ int main(){
     output_log("runningLog","Begin:");
     output_log("runningLog",timeString);
     #endif
-    #ifdef THREAD_POOL
+    #ifdef THREAD_POOL_FOR_AI
     #define NUM_OF_THREAD 16
     threadpool thpoolForAI=thpool_init(NUM_OF_THREAD);
     #endif
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    const int32_t scoreChoose[LENGTH_OF_STATES]={5,10,20,15,20,30,60,100,50,1000,5000,100000,800000,20000000,20000000,800000000};
+    const int32_t scoreChoose[LENGTH_OF_STATES]={0,10,20,15,20,30,60,100,50,1000,5000,100000,800000,20000000,20000000,800000000};
     AI_init(&classAI_t,scoreChoose);
     game_init(&classGame_t);
     draw_the_start_page();
     input_game_mode(&classGame_t);
     draw_the_chessboard(&classGame_t);
-    #ifndef THREAD_POOL
+    #ifndef THREAD_POOL_FOR_AI
     continue_the_game(&classGame_t,&classAI_t);
     #else
     continue_the_game(&classGame_t,&classAI_t,&thpoolForAI);
@@ -143,7 +143,7 @@ int main(){
     classGame_t.gameMode=PERSON_VS_COMPUTER;
     classGame_t.playerFlag=WHITE_PLAYER;
     draw_the_chessboard(&classGame_t);
-    #ifndef THREAD_POOL
+    #ifndef THREAD_POOL_FOR_AI
     continue_the_game(&classGame_t,&classAI_t);
     #else
     continue_the_game(&classGame_t,&classAI_t,&thpoolForAI);

@@ -20,7 +20,7 @@ typedef struct
 }TO_CHECK_t;
 
 void AI_init(ONE_AI_t *nowAI_t,const int32_t scoreChoose[]);
-#ifndef THREAD_POOL
+#ifndef THREAD_POOL_FOR_AI
 void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t);
 #else
 void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI);

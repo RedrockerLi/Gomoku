@@ -1,4 +1,6 @@
 rm main
+touch runningLog
+touch input
 cd Build
 cmake ..
 make 

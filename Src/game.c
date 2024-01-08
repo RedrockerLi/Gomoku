@@ -225,7 +225,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
         case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
     }
     uint8_t i;
-    printf(" ");
+    printf("  ");
     for(i=0;i<RANGE_OF_CHESSBOARD-1;i++){
         printf("%2c",'A'+i);
     }
@@ -400,11 +400,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     row=lastRow;
     countBlack=countWhite=0;
     for(col=0;col<RANGE_OF_CHESSBOARD;col++){
-        if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
+        if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
             countBlack++;
             countWhite=0;
             if(countBlack==5){
-                if(nowGame_t->stateOfChessboard[MAT(row,col)+1]==BLACK){
+                if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                     if(mode==0){
                         printf("Long-Ladder Suicide!\n");
                     }
@@ -413,7 +413,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                     return BLACK_WINE;
                 }
             }
-        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
+        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
             countBlack=0;
             countWhite++;
             if(countWhite==5){
@@ -428,11 +428,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     col=lastCol;
     countBlack=countWhite=0;
     for(row=0;row<RANGE_OF_CHESSBOARD;row++){
-        if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
+        if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
             countBlack++;
             countWhite=0;
             if(countBlack==5){
-                if(nowGame_t->stateOfChessboard[MAT((row+1),col)]==BLACK){
+                if(nowGame_t->stateOfChessboard[MAT((row+1),col)]==BLACK||nowGame_t->stateOfChessboard[MAT((row+1),col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+1),col)]==AI_BLACK){
                     if(mode==0){
                         printf("Long-Ladder Suicide!\n");
                     }
@@ -441,7 +441,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                     return BLACK_WINE;
                 }
             }
-        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
+        }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
             countBlack=0;
             countWhite++;
             if(countWhite==5){
@@ -456,11 +456,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     countBlack=countWhite=0;
     if(lastRow>=lastCol){
         for(row=lastRow-lastCol,col=0;row<RANGE_OF_CHESSBOARD&& col<RANGE_OF_CHESSBOARD;row++,col++){
-            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==AI_BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -469,7 +469,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
@@ -482,11 +482,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
         }
     }else{
         for(row=0,col=lastCol-lastRow;row<RANGE_OF_CHESSBOARD&& col<RANGE_OF_CHESSBOARD;row++,col++){
-            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+1),(col+1))]==AI_BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -495,7 +495,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
@@ -511,11 +511,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
     countBlack=countWhite=0;
     if(lastRow+lastCol>=RANGE_OF_CHESSBOARD-1){
         for(row=RANGE_OF_CHESSBOARD-1,col=lastRow+lastCol-(RANGE_OF_CHESSBOARD-1);row<RANGE_OF_CHESSBOARD&&col<RANGE_OF_CHESSBOARD;row--,col++){
-            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[MAT((row-1),(col+1))]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row-1),(col+1))]==BLACK||nowGame_t->stateOfChessboard[MAT((row-1),(col+1))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row-1),(col+1))]==AI_BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -524,7 +524,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
@@ -537,11 +537,11 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
         }
     }else{
         for(row=0,col=lastRow+lastCol;row<RANGE_OF_CHESSBOARD&& col<RANGE_OF_CHESSBOARD;row++,col--){
-            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                 countBlack++;
                 countWhite=0;
                 if(countBlack==5){
-                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col-1))]==BLACK){
+                    if(nowGame_t->stateOfChessboard[MAT((row+1),(col-1))]==BLACK||nowGame_t->stateOfChessboard[MAT((row+1),(col-1))]==TEMP_BLACK||nowGame_t->stateOfChessboard[MAT((row+1),(col-1))]==AI_BLACK){
                         if(mode==0){
                             printf("Long-Ladder Suicide!\n");
                         }
@@ -550,7 +550,7 @@ uint8_t call_the_game(ONE_GAME_t * const nowGame_t,uint8_t lastRow,uint8_t lastC
                         return BLACK_WINE;
                     }
                 }
-            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE){
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                 countBlack=0;
                 countWhite++;
                 if(countWhite==5){
@@ -805,7 +805,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
 
 /**
  * @brief 判断禁手
- * @param mode 控制模式|0:33+44|1:33+44+长连(无输出)|
+ * @param mode 控制模式|0:33+44|1:33+44+长连(无输出)|2:33+44(无输出)
 */
 uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t mode){
     uint8_t forbiddenState=FORBIDDEN_HAND-1;
@@ -856,7 +856,7 @@ uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t co
 /** 
  * @brief 继续游戏直到结束
 */
-#ifndef THREAD_POOL
+#ifndef THREAD_POOL_FOR_AI
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
 #else
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI){
@@ -896,7 +896,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
-                #ifndef THREAD_POOL
+                #ifndef THREAD_POOL_FOR_AI
                 calc_next_input(nowGame_t,nowAI_t);
                 #else
                 calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
@@ -939,15 +939,22 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             }
         }
     }else if(nowGame_t->gameMode==COMPUTER_VS_PERSON){
+        static uint8_t firstChessFlag=0;
         while (nowGame_t->gameWinner==CONTINUE){
             if(nowGame_t->playerFlag==WHITE_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
-                #ifndef THREAD_POOL
-                calc_next_input(nowGame_t,nowAI_t);
-                #else
-                calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
-                #endif
+                if(firstChessFlag==0){
+                    nowGame_t->blackInputChessPlace.row=nowGame_t->blackInputChessPlace.col=7;
+                    nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
+                    firstChessFlag++;
+                }else{
+                    #ifndef THREAD_POOL_FOR_AI
+                    calc_next_input(nowGame_t,nowAI_t);
+                    #else
+                    calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
+                    #endif
+                }
             }
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
