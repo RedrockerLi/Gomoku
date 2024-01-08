@@ -39,7 +39,7 @@ void game_init(ONE_GAME_t * const nowGame_t){
             nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
         }
     }
-    #ifdef LOG
+    #ifdef DEBUG_LOG
     uint8_t flag=1;
     for(uint8_t row=0;flag==1&&row<RANGE_OF_CHESSBOARD;row++){
         for(uint8_t col=0;flag==1&&col<RANGE_OF_CHESSBOARD;col++){
@@ -49,7 +49,7 @@ void game_init(ONE_GAME_t * const nowGame_t){
         }
     }
     if(flag==0){
-        output_log("runningLog","Error:game_init\n");
+        output_log("debugLog","Error:game_init\n");
     }
     #endif
     //先手初始化
@@ -883,11 +883,11 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else if(nowGame_t->gameWinner==WHITE_WINE){
+            }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
                 printf("WINNER:WHITE\n");
                 return;
             }
-            #ifndef ONLY_BLACK
+            #ifndef ONLY_BLACKPLEAR
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 nowGame_t->playerFlag=WHITE_PLAYER;
             }else{
@@ -907,12 +907,12 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                 #endif
             }
             #ifdef TEST_TIME
-            #ifdef LOG
-            output_log("runningLog","Exit:");
+            #ifdef DEBUG_LOG
+            output_log("debugLog","Exit:");
             time_t currentTime;
             time(&currentTime);
             uint8_t *timeString = ctime(&currentTime);
-            output_log("runningLog",timeString);
+            output_log("debugLog",timeString);
             #endif
             exit(0);
             #endif
@@ -932,19 +932,21 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             if(nowGame_t->gameWinner==BLACK_WINE){
                 printf("WINNER:BLACK\n");
                 return;
-            }else if(nowGame_t->gameWinner==WHITE_WINE){
+            }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
                 printf("WINNER:WHITE\n");
                 return;
             }
+            #ifndef ONLY_BLACKPLEAR
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 nowGame_t->playerFlag=WHITE_PLAYER;
             }else{
                 nowGame_t->playerFlag=BLACK_PLAYER;
             }
+            #endif
         }
     }else if(nowGame_t->gameMode==COMPUTER_VS_PERSON){
         static uint8_t firstChessFlag=0;
-        while (nowGame_t->gameWinner==CONTINUE){
+        while (nowGame_t->gameWinner==CONTINUE||nowGame_t->gameWinner==FORBIDDEN_HAND){
             if(nowGame_t->playerFlag==WHITE_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
@@ -960,13 +962,23 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                     #endif
                 }
             }
+             #ifdef DEBUG_LOG
+            output_log("debugLog","Info:");
+            uint8_t *message=int_to_string((int)nowGame_t->blackInputChessPlace.row);
+            output_log("debugLog",message);
+            output_log("debugLog","  ");
+            message=int_to_string((int)nowGame_t->blackInputChessPlace.col);
+            output_log("debugLog",message);
+            output_log("debugLog","\n");
+            free((void *)message);
+            #endif
             #ifdef TEST_TIME
-            #ifdef LOG
-            output_log("runningLog","Exit:");
+            #ifdef DEBUG_LOG
+            output_log("debugLog","Exit:");
             time_t currentTime;
             time(&currentTime);
             uint8_t *timeString = ctime(&currentTime);
-            output_log("runningLog",timeString);
+            output_log("debugLog",timeString);
             #endif
             exit(0);
             #endif
@@ -985,11 +997,13 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                 printf("WINNER:WHITE\n");
                 return;
             }
+            #ifndef ONLY_BLACKPLEAR
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 nowGame_t->playerFlag=WHITE_PLAYER;
             }else{
                 nowGame_t->playerFlag=BLACK_PLAYER;
             }
+            #endif
         }
     }
 }

@@ -10,9 +10,10 @@
 #include "AI.h"
 #include "game.h"
 #include "main.h"
+#include "train.h"
 #include "threadPool.h"
 
-#ifndef GAME
+#ifdef TEST_TIME
 /**
  * @brief 在棋盘放黑子
 */
@@ -40,7 +41,7 @@ void set_black(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
 void log_init(uint8_t *fileName){
     int file;
     if((file=open(fileName,O_WRONLY|O_TRUNC))==-1){
-        printf("Error.Cannot find file runningLog\n");
+        printf("Error.Cannot find file %s\n",fileName);
     }
     close(file);
 }
@@ -51,7 +52,7 @@ void log_init(uint8_t *fileName){
 void output_log(uint8_t *fileName,uint8_t *output){
     int file;
     if((file=open(fileName,O_WRONLY|O_APPEND))==-1){
-        printf("Error.Cannot find file runningLog\n");
+        printf("Error.Cannot find file %s\n",fileName);
     }
     while(write(file,output,strlen(output))==-1);
     close(file);
@@ -105,13 +106,13 @@ int main(){
     close(file);
     printf("%s",fileBuf);
     #endif
-    #ifdef LOG
-    log_init("runningLog");
+    #ifdef DEBUG_LOG
+    log_init("debugLog");
     time_t currentTime;
     time(&currentTime);
     uint8_t *timeString = ctime(&currentTime);
-    output_log("runningLog","Begin:");
-    output_log("runningLog",timeString);
+    output_log("debugLog","Begin:");
+    output_log("debugLog",timeString);
     #endif
     #ifdef THREAD_POOL_FOR_AI
     #define NUM_OF_THREAD 16
@@ -120,7 +121,7 @@ int main(){
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    const int32_t scoreChoose[LENGTH_OF_STATES]={0,10,20,15,20,30,60,100,50,1000,5000,100000,800000,10000000,20000000,2000000000};
+    const int32_t scoreChoose[LENGTH_OF_STATES]={0,1,2,1,2,3,60,10,5,100,500,1000,30000,10000,10000,5000000,40000000,400000000};
     AI_init(&classAI_t,scoreChoose);
     game_init(&classGame_t);
     draw_the_start_page();
@@ -135,7 +136,7 @@ int main(){
     #ifdef TEST_TIME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    const int32_t scoreChoose[LENGTH_OF_STATES]={5,10,20,15,20,30,60,100,50,1000,500,10000,20000,30000,60000,80000};
+    const int32_t scoreChoose[LENGTH_OF_STATES]={0,10,20,15,20,30,60,100,50,1000,5000,10000,300000,100000,100000,50000000,400000000};
     game_init(&classGame_t);
     AI_init(&classAI_t,scoreChoose);
     set_black(&classGame_t,5,7);
@@ -148,11 +149,27 @@ int main(){
     continue_the_game(&classGame_t,&classAI_t,&thpoolForAI);
     #endif
     #endif
-    #ifdef LOG
-    output_log("runningLog","Exit:");
+    #ifdef DEBUG_LOG
+    output_log("debugLog","Exit:");
     time(&currentTime);
     timeString = ctime(&currentTime);
-    output_log("runningLog",timeString);
+    output_log("debugLog",timeString);
+    #endif
+    #ifdef TRAIN
+    time_t currentTime;
+    uint8_t *timeString;
+    log_init("trainLog");
+    output_log("trainLog","Begin: ");
+    time(&currentTime);
+    timeString = ctime(&currentTime);
+    output_log("trainLog",timeString);
+    output_log("trainLog","\n");
+
+    output_log("trainLog","Finish: ");
+    time(&currentTime);
+    timeString = ctime(&currentTime);
+    output_log("trainLog",timeString);
+    output_log("trainLog","\n");
     #endif
     return 0;
 }

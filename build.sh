@@ -1,6 +1,7 @@
 rm main
-touch runningLog
+touch debugLog
 touch input
+touch trainLog
 cd Build
 cmake ..
 make 
