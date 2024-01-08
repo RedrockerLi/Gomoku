@@ -279,10 +279,39 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
             }
         }
     }
+    #ifdef LOG
+    output_log("runningLog","\n");
+    for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
+        for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
+                output_log("runningLog"," BLACK ");
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
+                output_log("runningLog"," WHITE ");
+            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==TEMP_BLACK){
+                output_log("runningLog","  ERR  ");
+            }else{
+                output_log("runningLog","  NON  ");
+            }
+        }
+        output_log("runningLog","\n");
+    }
+    output_log("runningLog","\n");
+    for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
+        for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+            if(scoreOfChild[MAT(row,col)]==MIN_OF_INT32){
+                output_log("runningLog"," MIN ");
+            }else if(scoreOfChild[MAT(row,col)]==MAX_OF_INT32){
+                output_log("runningLog"," MAX ");
+            }else{
+                output_log("runningLog"," 000 ");
+            }
+        }
+        output_log("runningLog","\n");
+    }
+    output_log("runningLog","\n");
+    #endif
 }
-#ifdef LOG
-int countOfAlphaBeta=0;
-#endif
+
 /**
  * @brief alpha-beta剪枝
 */
@@ -292,14 +321,15 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
 int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,int8_t depth,int32_t alpha,int32_t beta,uint8_t addRow,uint8_t addCol,threadpool * thpoolForAI){
 #endif
     #ifdef LOG
+    static int counterOfAlphaBeta=1;
     if((depth+1)%2==1){
         output_log("runningLog","\nEnter:alpha_beta_pruning(MIN)");
     }else{
         output_log("runningLog","\nEnter:alpha_beta_pruning(MAX)");
     }
-    output_log("runningLog"," countOfAlphaBeta:");
-    countOfAlphaBeta++;
-    char *message=int_to_string(countOfAlphaBeta);
+    output_log("runningLog"," counterOfAlphaBeta:");
+    counterOfAlphaBeta++;
+    char *message=int_to_string(counterOfAlphaBeta);
     output_log("runningLog",message);
     output_log("runningLog"," depth:");
     message=int_to_string(depth);
@@ -464,6 +494,12 @@ void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
 #else
 void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI){
 #endif
+    #ifdef LOG
+    static int counterOfCalcNextInput=1;
+    char *message=int_to_string(counterOfCalcNextInput);
+    output_log("runningLog","\n\nCounter:calc_next_input \n"); 
+    output_log("runningLog",message); 
+    #endif
     int32_t nowMax=MIN_OF_INT32;
     TO_CHECK_t greatChildrenGroup[NUM_OF_CHILDREN];
     if(nowGame_t->playerFlag==BLACK_PLAYER){

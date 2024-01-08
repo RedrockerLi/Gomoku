@@ -120,7 +120,7 @@ int main(){
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    const int32_t scoreChoose[LENGTH_OF_STATES]={0,10,20,15,20,30,60,100,50,1000,5000,100000,800000,20000000,20000000,800000000};
+    const int32_t scoreChoose[LENGTH_OF_STATES]={0,10,20,15,20,30,60,100,50,1000,5000,100000,800000,10000000,20000000,2000000000};
     AI_init(&classAI_t,scoreChoose);
     game_init(&classGame_t);
     draw_the_start_page();
@@ -138,8 +138,7 @@ int main(){
     const int32_t scoreChoose[LENGTH_OF_STATES]={5,10,20,15,20,30,60,100,50,1000,500,10000,20000,30000,60000,80000};
     game_init(&classGame_t);
     AI_init(&classAI_t,scoreChoose);
-    set_black(&classGame_t,7,7);
-    set_black(&classGame_t,8,7);
+    set_black(&classGame_t,5,7);
     classGame_t.gameMode=PERSON_VS_COMPUTER;
     classGame_t.playerFlag=WHITE_PLAYER;
     draw_the_chessboard(&classGame_t);

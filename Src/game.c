@@ -676,7 +676,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
             }else{
                 samplingResult=(lineToJudge&window)>>((stdPlace-count)*2);
             }
-            if(count!=0){
+            if(count!=0){//count==0右移stdplace不在samplingResult中
                 if(samplingResult>>2==0b11010111){
                     if(stateOfChess<TWO_2B){
                     stateOfChess=TWO_2B;
@@ -706,6 +706,10 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
             }else if(samplingResult==0b0111010101||samplingResult==0b0111011101||samplingResult==0b0101111101){
                 if(stateOfChess<THREE_JUMP2){
                     stateOfChess=THREE_JUMP2;
+                }
+            }else if(samplingResult==0b0101010101){
+                if(stateOfChess<FIVE){
+                    stateOfChess=FIVE;
                 }
             }
         }
@@ -903,14 +907,14 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                 #endif
             }
             #ifdef TEST_TIME
-                #ifdef LOG
-                output_log("runningLog","Exit:");
-                time_t currentTime;
-                time(&currentTime);
-                uint8_t *timeString = ctime(&currentTime);
-                output_log("runningLog",timeString);
-                #endif
-                exit(0);
+            #ifdef LOG
+            output_log("runningLog","Exit:");
+            time_t currentTime;
+            time(&currentTime);
+            uint8_t *timeString = ctime(&currentTime);
+            output_log("runningLog",timeString);
+            #endif
+            exit(0);
             #endif
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
@@ -956,6 +960,16 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                     #endif
                 }
             }
+            #ifdef TEST_TIME
+            #ifdef LOG
+            output_log("runningLog","Exit:");
+            time_t currentTime;
+            time(&currentTime);
+            uint8_t *timeString = ctime(&currentTime);
+            output_log("runningLog",timeString);
+            #endif
+            exit(0);
+            #endif
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
             if(nowGame_t->playerFlag==BLACK_PLAYER){
