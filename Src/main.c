@@ -188,14 +188,22 @@ int main(){
         if(parameters.c_2>40){
             parameters.c_2--;
         }
+        output_log("trainLog","Time: ");
+        time(&currentTime);
+        timeString = ctime(&currentTime);
+        output_log("trainLog",timeString);
         uint8_t *message;
+        message=int_to_string(counters);
+        output_log("trainLog","Interation times: ");
+        output_log("trainLog",message);
+        output_log("trainLog","\n");
         output_log("trainLog","bestScoresInAll:\n");
         for(uint8_t i=0;i<LENGTH_OF_STATES;i++){
             message=int_to_string(bestScoresInAll[i]);
             output_log("trainLog",message);
             output_log("trainLog"," ");
         }
-        output_log("trainLog","\n\n");
+        output_log("trainLog","\n");
         for(uint8_t i=0;i<NUM_OF_PARTICLE;i++){
             output_log("trainLog","partices:\n");
             output_log("trainLog","bestScoress:\n");
@@ -204,21 +212,21 @@ int main(){
                 output_log("trainLog",message);
                 output_log("trainLog"," ");
             }
-            output_log("trainLog","\n\n");
+            output_log("trainLog","\n");
             output_log("trainLog","nowScores:\n");
             for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
                 message=int_to_string(partices[i].nowScores[j]);
                 output_log("trainLog",message);
                 output_log("trainLog"," ");
             }
-            output_log("trainLog","\n\n");
+            output_log("trainLog","\n");
             output_log("trainLog","nowSpeed:\n");
             for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
                 message=int_to_string(partices[i].nowSpeed[j]);
                 output_log("trainLog",message);
                 output_log("trainLog"," ");
             }
-            output_log("trainLog","\n\n\n");
+            output_log("trainLog","\n\n");
         }
     }
     time(&currentTime);
