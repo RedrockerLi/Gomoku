@@ -115,7 +115,7 @@ int main(){
     output_log("debugLog",timeString);
     #endif
     #ifdef THREAD_POOL_FOR_AI
-    #define NUM_OF_THREAD 16
+    #define NUM_OF_THREAD 2
     threadpool thpoolForAI=thpool_init(NUM_OF_THREAD);
     #endif
     #ifdef GAME
@@ -156,6 +156,7 @@ int main(){
     output_log("debugLog",timeString);
     #endif
     #ifdef TRAIN
+    #define NUM_OF_THREAD 16
     time_t currentTime;
     uint8_t *timeString;
     log_init("trainLog");
@@ -164,8 +165,62 @@ int main(){
     timeString = ctime(&currentTime);
     output_log("trainLog",timeString);
     output_log("trainLog","\n");
-
-    output_log("trainLog","Finish: ");
+    ONE_PARTICLE_t partices[NUM_OF_PARTICLE];
+    PARAMETER_t parameters;
+    int32_t bestScoresInAll[LENGTH_OF_STATES]={0,1,2,1,2,3,60,10,5,100,500,1000,30000,10000,10000,5000000,40000000,400000000};
+    uint8_t numsInTheCircle=0;//在全局最大周围的粒子
+    uint16_t counters=0;
+    threadpool thpoolForTrain=thpool_init(NUM_OF_THREAD);
+    parameters.omega=parameters.c_1=parameters.c_2=100;
+    particles_init(partices);
+    while(numsInTheCircle<=29&&counters<200){
+        counters++;
+        refresh_max(partices,bestScoresInAll);
+        refresh_speed(partices,bestScoresInAll,&parameters);
+        refresh_scores(partices,&parameters);
+        refresh_progress(partices,bestScoresInAll,&numsInTheCircle);
+        if(parameters.omega>40){
+            parameters.omega--;
+        }
+        if(parameters.c_1>40){
+            parameters.c_1--;
+        }
+        if(parameters.c_2>40){
+            parameters.c_2--;
+        }
+        uint8_t *message;
+        output_log("trainLog","bestScoresInAll:\n");
+        for(uint8_t i=0;i<LENGTH_OF_STATES;i++){
+            message=int_to_string(bestScoresInAll[i]);
+            output_log("trainLog",message);
+            output_log("trainLog"," ");
+        }
+        output_log("trainLog","\n\n");
+        for(uint8_t i=0;i<NUM_OF_PARTICLE;i++){
+            output_log("trainLog","partices:\n");
+            output_log("trainLog","bestScoress:\n");
+            for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
+                message=int_to_string(partices[i].bestScores[j]);
+                output_log("trainLog",message);
+                output_log("trainLog"," ");
+            }
+            output_log("trainLog","\n\n");
+            output_log("trainLog","nowScores:\n");
+            for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
+                message=int_to_string(partices[i].nowScores[j]);
+                output_log("trainLog",message);
+                output_log("trainLog"," ");
+            }
+            output_log("trainLog","\n\n");
+            output_log("trainLog","nowSpeed:\n");
+            for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
+                message=int_to_string(partices[i].nowSpeed[j]);
+                output_log("trainLog",message);
+                output_log("trainLog"," ");
+            }
+            output_log("trainLog","\n\n\n");
+        }
+    }
     time(&currentTime);
     timeString = ctime(&currentTime);
     output_log("trainLog",timeString);

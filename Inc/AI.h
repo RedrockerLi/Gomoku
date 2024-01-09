@@ -4,8 +4,8 @@
 #include "game.h"
 #include "threadPool.h"
 
-#ifndef _ONE_AI_t_H
-#define _ONE_AI_t_H
+#ifndef _ONE_AI_t
+#define _ONE_AI_t
 typedef struct 
 {
     int32_t scoreOfChessStates[LENGTH_OF_STATES];
