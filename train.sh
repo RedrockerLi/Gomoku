@@ -9,6 +9,8 @@ do
 mkdir Train$count
 cp -p ../main ./Train$count
 touch ./Train$count/trainLog
+cd ./Train$count
 ./main &
+cd ..
 let "count++"
 done
