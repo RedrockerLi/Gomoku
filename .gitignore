@@ -1,5 +1,6 @@
-/Build
-/.vscode
+Build
+.vscode
+Train
 main
 input
 debugLog
