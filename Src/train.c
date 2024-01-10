@@ -149,14 +149,8 @@ void refresh_scores(ONE_PARTICLE_t *particles,const PARAMETER_t * const paramete
         for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
             lastScores=particles[i].nowScores[j];
             particles[i].nowScores[j]=particles[i].nowScores[j]+particles[i].nowSpeed[j];
-            if(particles[i].nowSpeed[j]>0){
-                if(particles[i].nowScores[j]<lastScores){
-                    particles[i].nowScores[j]=lastScores;
-                }
-            }else if(particles[i].nowSpeed[j]<0){
-                if(particles[i].nowScores[j]>lastScores){
-                    particles[i].nowScores[j]=lastScores;
-                }
+            if(particles[i].nowScores[j]<0){
+                particles[i].nowScores[j]=lastScores;
             }
         }
     }
@@ -170,7 +164,7 @@ void refresh_progress(const ONE_PARTICLE_t * const particles,const int32_t * con
     *numsInTheCircle=0;
     for(uint8_t i=0;i<NUM_OF_PARTICLE;i++){
         for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
-            error=error+abs(bestScoresInAll[j]-particles[i].nowScores[j])*10000/bestScoresInAll[j];
+            error=error+abs(bestScoresInAll[j]-particles[i].nowScores[j])*10000/(bestScoresInAll[j]+1);
         }
         if(error<500){
             (*numsInTheCircle)++;

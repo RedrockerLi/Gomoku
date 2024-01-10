@@ -121,7 +121,7 @@ int main(){
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    const int32_t scoreChoose[LENGTH_OF_STATES]={0,1,2,1,2,3,60,10,5,100,500,1000,30000,10000,10000,5000000,40000000,400000000};
+    const int32_t scoreChoose[LENGTH_OF_STATES]={802,228,577,2961,1140,984,3912,4107,5427,25176,68016,46655,51958,-20916,8433223,8822301,-3345757,58091828};
     AI_init(&classAI_t,scoreChoose);
     game_init(&classGame_t);
     draw_the_start_page();
@@ -167,7 +167,7 @@ int main(){
     output_log("trainLog","\n");
     ONE_PARTICLE_t partices[NUM_OF_PARTICLE];
     PARAMETER_t parameters;
-    int32_t bestScoresInAll[LENGTH_OF_STATES]={0,1,2,1,2,3,60,10,5,100,500,1000,30000,10000,10000,5000000,40000000,400000000};
+    int32_t bestScoresInAll[LENGTH_OF_STATES]={1,1,2,1,2,3,60,10,5,100,500,1000,30000,10000,10000,5000000,40000000,400000000};
     uint8_t numsInTheCircle=0;//在全局最大周围的粒子
     uint16_t counters=0;
     parameters.omega=parameters.c_1=parameters.c_2=100;
