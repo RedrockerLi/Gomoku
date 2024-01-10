@@ -22,15 +22,15 @@ void particles_init(ONE_PARTICLE_t *particles){
         particles[i].nowScores[TWO_0B]=particles[i].nowScores[SINGLE_0B]+rand()%1000;
         particles[i].nowScores[TWO_1B]=particles[i].nowScores[SINGLE_0B]+rand()%1000;
         particles[i].nowScores[TWO_2B]=particles[i].nowScores[SINGLE_0B]+rand()%1000;
-        particles[i].nowScores[THREE_JUMP2]=particles[i].nowScores[TWO_JUMP3]+10*(rand()%10000);
-        particles[i].nowScores[LIVE_THREE_JUMP1]=particles[i].nowScores[TWO_JUMP3]+10*(rand()%10000);
-        particles[i].nowScores[FIGHT_THREE_JUMP1]=particles[i].nowScores[TWO_JUMP3]+10*(rand()%10000);
-        particles[i].nowScores[FAKE_THREE]=particles[i].nowScores[TWO_JUMP3]+10*(rand()%10000);
-        particles[i].nowScores[LIVE_THREE]=particles[i].nowScores[TWO_JUMP3]+10*(rand()%10000);
-        particles[i].nowScores[JUMP_FOUR]=particles[i].nowScores[LIVE_THREE]+100*(rand()%100000);
-        particles[i].nowScores[FIGHT_FOUR]=particles[i].nowScores[LIVE_THREE]+100*(rand()%100000);
-        particles[i].nowScores[LIVE_FOUR]=particles[i].nowScores[LIVE_THREE]+100*(rand()%100000);
-        particles[i].nowScores[FIVE]=particles[i].nowScores[LIVE_FOUR]+1000*(rand()%1000000);
+        particles[i].nowScores[THREE_JUMP2]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
+        particles[i].nowScores[LIVE_THREE_JUMP1]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
+        particles[i].nowScores[FIGHT_THREE_JUMP1]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
+        particles[i].nowScores[FAKE_THREE]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
+        particles[i].nowScores[LIVE_THREE]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
+        particles[i].nowScores[JUMP_FOUR]=particles[i].nowScores[LIVE_THREE]+10*(rand()%100000);
+        particles[i].nowScores[FIGHT_FOUR]=particles[i].nowScores[LIVE_THREE]+10*(rand()%100000);
+        particles[i].nowScores[LIVE_FOUR]=particles[i].nowScores[LIVE_THREE]+10*(rand()%100000);
+        particles[i].nowScores[FIVE]=particles[i].nowScores[LIVE_FOUR]+100*(rand()%1000000);
     }
     for(uint8_t i=0;i<NUM_OF_PARTICLE;i++){
         for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
