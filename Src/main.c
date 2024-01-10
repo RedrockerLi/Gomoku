@@ -170,7 +170,6 @@ int main(){
     int32_t bestScoresInAll[LENGTH_OF_STATES]={0,1,2,1,2,3,60,10,5,100,500,1000,30000,10000,10000,5000000,40000000,400000000};
     uint8_t numsInTheCircle=0;//在全局最大周围的粒子
     uint16_t counters=0;
-    threadpool thpoolForTrain=thpool_init(NUM_OF_THREAD);
     parameters.omega=parameters.c_1=parameters.c_2=100;
     particles_init(partices);
     while(numsInTheCircle<=29&&counters<200){

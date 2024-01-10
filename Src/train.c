@@ -48,11 +48,17 @@ void particles_init(ONE_PARTICLE_t *particles){
 uint8_t carry_out_one_game(ONE_AI_VS_AI_t *nowGame_t){
     game_init(&nowGame_t->thisGame_t);
     uint8_t nums=0;
+    uint8_t flag=0;
     while (nowGame_t->thisGame_t.gameWinner==CONTINUE){
         if(nums==225){
             return CONTINUE;
         }
         if(nowGame_t->thisGame_t.playerFlag==BLACK_PLAYER){
+            if(flag==0){
+                nowGame_t->thisGame_t.blackInputChessPlace.row=nowGame_t->thisGame_t.blackInputChessPlace.col=7;
+                nowGame_t->thisGame_t.blackInputChessPlace.flag=INPUT_UNUSED;
+                flag++;
+            }
             calc_next_input(&nowGame_t->thisGame_t,&nowGame_t->blackPlayer_t);
         }else{
             calc_next_input(&nowGame_t->thisGame_t,&nowGame_t->whitePlayer_t);
@@ -115,7 +121,21 @@ void refresh_max(ONE_PARTICLE_t *particles,int32_t *bestScoresInAll){
 void refresh_speed(ONE_PARTICLE_t *particles,const int32_t * const bestScoresInAll,const PARAMETER_t const *parameters){
     for(uint8_t i=0;i<NUM_OF_PARTICLE;i++){
         for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
-            particles[i].nowSpeed[j]=parameters->omega/100*particles[i].nowSpeed[j]+parameters->c_1/100*(particles[i].bestScores[j]-particles[i].nowScores[j])+parameters->c_2/100*(bestScoresInAll[j]-particles[i].nowScores[j]);
+            if(particles[i].nowSpeed[j]>0){//绝对值向上取整
+                particles[i].nowSpeed[j]=(parameters->omega*particles[i].nowSpeed[j]+99)/100;
+            }else{
+                particles[i].nowSpeed[j]=(parameters->omega*particles[i].nowSpeed[j]-99)/100;
+            }
+            if(particles[i].bestScores[j]-particles[i].nowScores[j]>0){
+                particles[i].nowSpeed[j]=particles[i].nowSpeed[j]+(parameters->c_1*(particles[i].bestScores[j]-particles[i].nowScores[j])+99)/100;
+            }else{
+                particles[i].nowSpeed[j]=particles[i].nowSpeed[j]+(parameters->c_1*(particles[i].bestScores[j]-particles[i].nowScores[j])-99)/100;
+            }
+            if(bestScoresInAll[j]-particles[i].nowScores[j]>0){
+                particles[i].nowSpeed[j]=particles[i].nowSpeed[j]+(parameters->c_2*(bestScoresInAll[j]-particles[i].nowScores[j])+99)/100
+            }else{
+                particles[i].nowSpeed[j]=particles[i].nowSpeed[j]+(parameters->c_2*(bestScoresInAll[j]-particles[i].nowScores[j])-99)/100
+            }
         }
     }
 }
