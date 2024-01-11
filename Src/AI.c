@@ -1,5 +1,6 @@
 #include <stdint.h>
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "AI.h"
 #include "game.h"
@@ -46,24 +47,41 @@ void AI_init(ONE_AI_t *nowAI_t,const int32_t scoreChoose[]){
 */
 int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
     int32_t valueOfAll=0;
-    for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
-        for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
-            if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
-                for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                    valueOfAll+=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)];
+    if(nowGame_t->playerFlag==BLACK_PLAYER){
+        for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
+            for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+                if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
+                    for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
+                        valueOfAll+=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)];
+                    }
+                }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
+                    for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
+                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)]*2;
+                    }
                 }
-            }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
-                for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                    valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)];
+            }
+        }
+    }else{
+        for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
+            for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+                if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
+                    for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
+                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)]*2;
+                    }
+                }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
+                    for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
+                        valueOfAll+=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)];
+                    }
                 }
             }
         }
     }
-    if(nowGame_t->playerFlag==BLACK_PLAYER){
-        return valueOfAll;
-    }else{
-        return -valueOfAll;
-    }
+    #ifdef PRINT_DEBUG
+    draw_the_chessboard(nowGame_t);
+    uint8_t in;
+    in=getchar();
+    #endif
+    return valueOfAll;
 }
 
 #ifdef THREAD_POOL_FOR_AI
@@ -116,7 +134,7 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
             greatChildrenGroup[i].row=greatChildrenGroup[i].col=0;
         }
     }
-    if(depth%2==0){
+    if((depth+1)%2==0){
         flag=1;
         for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
             for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){

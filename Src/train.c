@@ -160,13 +160,15 @@ void refresh_scores(ONE_PARTICLE_t *particles,const PARAMETER_t * const paramete
  * @brief 更新进度
 */
 void refresh_progress(const ONE_PARTICLE_t * const particles,const int32_t * const bestScoresInAll,uint8_t *numsInTheCircle){
-    uint16_t error=0;
+    uint16_t flag=1;
     *numsInTheCircle=0;
     for(uint8_t i=0;i<NUM_OF_PARTICLE;i++){
         for(uint8_t j=0;j<LENGTH_OF_STATES;j++){
-            error=error+abs(bestScoresInAll[j]-particles[i].nowScores[j])*10000/(bestScoresInAll[j]+1);
+            if(abs(particles[i].nowSpeed[j])!=1){
+                flag=0;
+            }
         }
-        if(error<500){
+        if(flag==1){
             (*numsInTheCircle)++;
         }
     }
