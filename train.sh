@@ -7,6 +7,7 @@ cd Train
 count=1
 while ((count<=16))
 do
+sleep 1
 mkdir Train$count
 cp -p ../main ./Train$count
 touch ./Train$count/trainLog

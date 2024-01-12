@@ -147,6 +147,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
         case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         case AI_BLACK:printf("* "); break;
         case AI_WHITE:printf("# "); break;
+        default :printf("x ");
     }
     //中间列
     for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
@@ -158,6 +159,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
             case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
             case AI_BLACK:printf("* "); break;
             case AI_WHITE:printf("# "); break;
+            default :printf("x ");
         }
     }
     //最后列
@@ -169,6 +171,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
         case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         case AI_BLACK:printf("* \n"); break;
         case AI_WHITE:printf("# \n"); break;
+        default :printf("x \n");
     }
     //中间行
     for(row=1;row<RANGE_OF_CHESSBOARD-1;row++){
@@ -183,6 +186,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
             case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
             case AI_BLACK:printf("* "); break;
             case AI_WHITE:printf("# "); break;
+            default :printf("x ");
         }
         //中间列
         for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
@@ -194,6 +198,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
                 case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
                 case AI_BLACK:printf("* "); break;
                 case AI_WHITE:printf("# "); break;
+                default :printf("x ");
             }
         }
         //最后列
@@ -205,6 +210,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
             case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
             case AI_BLACK:printf("* \n"); break;
             case AI_WHITE:printf("# \n"); break;
+            default :printf("x \n");
         }
     }
     //最后行
@@ -219,6 +225,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
         case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         case AI_BLACK:printf("* "); break;
         case AI_WHITE:printf("# "); break;
+        default :printf("x ");
     }
     //中间列
     for(col=1;col<RANGE_OF_CHESSBOARD-1;col++){
@@ -230,6 +237,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
             case LAST_WHITE:printf("%s",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
             case AI_BLACK:printf("* "); break;
             case AI_WHITE:printf("# "); break;
+            default :printf("x ");
         }   
     }
     //最后列
@@ -241,6 +249,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
         case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         case AI_BLACK:printf("* \n"); break;
         case AI_WHITE:printf("# \n"); break;
+        default :printf("x ");
     }
     uint8_t i;
     printf("  ");

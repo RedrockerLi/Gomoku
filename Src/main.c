@@ -121,7 +121,7 @@ int main(){
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    const int32_t scoreChoose[LENGTH_OF_STATES]={0,629,768,1559,1292,3630,10593,4002,1477,59115,10138,0,64680,16939,0,8560949,1380349,24587836};
+    const int32_t scoreChoose[LENGTH_OF_STATES]={395,0,452,11167,0,3833,11938,0,6075,22573,0,32578,2418,6782,10203,10379,1103893,243620394};
     AI_init(&classAI_t,scoreChoose);
     game_init(&classGame_t);
     draw_the_start_page();

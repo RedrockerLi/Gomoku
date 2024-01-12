@@ -3,11 +3,11 @@
 #include <stdint.h>
 
 // #define GAME        //比赛模式
-#define TEST_TIME   //检测AI计算时间
-// #define TRAIN    //训练模式
+// #define TEST_TIME   //检测AI计算时间
+#define TRAIN    //训练模式
 
 // #define THREAD_POOL_FOR_AI //打开则AI有线程池功能,TRAIN模式下必须关闭
-#define CLEAR //打开则有清屏功能
+// #define CLEAR //打开则有清屏功能
 // #define ONLY_BLACKPLEAR //打开则只有黑棋玩家，用于实验禁手
 // #define SHOW_INPUT //打开即可从input文件中读入数据并打印出来
 #define LOG //控制日志函数,需要LOG必须打开(TRAIN模式必须打开)

@@ -19,6 +19,9 @@
 // #define MAX_DEPTH_OF_ALPHA_BETA 2 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
 // #define NUM_OF_CHILDREN 10 //每一层搜索的子节点数量
 
+// #define MAX_DEPTH_OF_ALPHA_BETA 6 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+// #define NUM_OF_CHILDREN 1 //每一层搜索的子节点数量
+
 #define MAX(a,b) a>b?a:b
 #define MIN(a,b) a<b?a:b
 
@@ -46,7 +49,7 @@ void AI_init(ONE_AI_t *nowAI_t,const int32_t scoreChoose[]){
  * @brief 给局势打分
 */
 int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
-    int32_t valueOfAll=0;
+    int64_t valueOfAll=0;
     if(nowGame_t->playerFlag==BLACK_PLAYER){
         for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
             for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
@@ -81,7 +84,13 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
     uint8_t in;
     in=getchar();
     #endif
-    return valueOfAll;
+    if(valueOfAll>MAX_OF_INT32){
+        return MAX_OF_INT32;
+    }else if(valueOfAll<MIN_OF_INT32){
+        return MIN_OF_INT32;
+    }else{
+        return valueOfAll;
+    }
 }
 
 #ifdef THREAD_POOL_FOR_AI
@@ -119,9 +128,9 @@ void value_the_game_with_THREAD_POOL_FOR_AI(ONE_GAME_t * const nowGame_t,ONE_AI_
  * @brief 预先找到比较好的点
 */
 #ifndef THREAD_POOL_FOR_AI
-void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,TO_CHECK_t greatChildrenGroup[],uint8_t playerFlag,int8_t depth){
+void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,TO_CHECK_t greatChildrenGroup[],int8_t depth){
 #else
-void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,TO_CHECK_t greatChildrenGroup[],uint8_t playerFlag,int8_t depth,threadpool * thpoolForAI){
+void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,TO_CHECK_t greatChildrenGroup[],int8_t depth,threadpool * thpoolForAI){
 #endif
     uint8_t i,flag;
     int32_t scoreOfChild[RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD];
@@ -134,12 +143,12 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
             greatChildrenGroup[i].row=greatChildrenGroup[i].col=0;
         }
     }
-    if((depth+1)%2==0){
+    if(depth%2==0){
         flag=1;
         for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
             for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
                 if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
-                    if(playerFlag==WHITE_PLAYER){
+                    if(nowGame_t->playerFlag==WHITE_PLAYER){
                         nowGame_t->stateOfChessboard[MAT(row,col)]=AI_BLACK;
                         if(judge_forbidden_hand(nowGame_t,row,col,1)==FORBIDDEN_HAND){
                             scoreOfChild[MAT(row,col)]=MAX_OF_INT32;
@@ -196,7 +205,7 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
         for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
             for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
                 if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
-                    if(playerFlag==BLACK_PLAYER){
+                    if(nowGame_t->playerFlag==BLACK_PLAYER){
                         nowGame_t->stateOfChessboard[MAT(row,col)]=AI_BLACK;
                         if(judge_forbidden_hand(nowGame_t,row,col,1)==FORBIDDEN_HAND){
                             scoreOfChild[MAT(row,col)]=MIN_OF_INT32;
@@ -306,6 +315,42 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
             nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=AI_WHITE;
         }
     }
+    uint8_t ansOfCallTheGame=call_the_game(nowGame_t,addRow,addCol,1);
+    if(ansOfCallTheGame==BLACK_WINE){
+        if(nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_WHITE){
+            nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=NONE;
+        }
+        if((depth+1)%2==0){
+            if(nowGame_t->playerFlag==BLACK){
+                return MIN_OF_INT32;
+            }else{
+                return MAX_OF_INT32;
+            }
+        }else{
+            if(nowGame_t->playerFlag==BLACK){
+                return MAX_OF_INT32;
+            }else{
+                return MIN_OF_INT32;
+            }
+        }
+    }else if(ansOfCallTheGame==WHITE_WINE){
+        if(nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_WHITE){
+            nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=NONE;
+        }
+        if((depth+1)%2==0){
+            if(nowGame_t->playerFlag==BLACK){
+                return MAX_OF_INT32;
+            }else{
+                return MIN_OF_INT32;
+            }
+        }else{
+            if(nowGame_t->playerFlag==BLACK){
+                return MIN_OF_INT32;
+            }else{
+                return MAX_OF_INT32;
+            }
+        }
+    }
     if(depth==-1){
         #ifndef THREAD_POOL_FOR_AI
         scoreOfChild=value_the_game(nowGame_t,nowAI_t);
@@ -321,19 +366,11 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
         if(depth%2==0){//算MIN层节点分数
             scoreOfChild=MAX_OF_INT32;
             TO_CHECK_t greatChildrenGroup[NUM_OF_CHILDREN];
-            if(nowGame_t->playerFlag==WHITE_PLAYER){
-                #ifndef THREAD_POOL_FOR_AI
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,depth);
-                #else
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,depth,thpoolForAI);
-                #endif
-            }else{
-                #ifndef THREAD_POOL_FOR_AI
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,WHITE_PLAYER,depth);
-                #else
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,WHITE_PLAYER,depth,thpoolForAI);
-                #endif
-            }
+            #ifndef THREAD_POOL_FOR_AI
+            fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,depth);
+            #else
+            fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,depth,thpoolForAI);
+            #endif
             #ifdef DEBUG_LOG
             output_log("debugLog","Success:alpha_beta_pruning->fine_great_children(MIN)\n");
             #endif
@@ -354,19 +391,11 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
         }else{
             scoreOfChild=MIN_OF_INT32;
             TO_CHECK_t greatChildrenGroup[NUM_OF_CHILDREN];
-            if(nowGame_t->playerFlag==WHITE_PLAYER){
-                #ifndef THREAD_POOL_FOR_AI
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,WHITE_PLAYER,depth);
-                #else
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,WHITE_PLAYER,depth,thpoolForAI);
-                #endif
-            }else{
-                #ifndef THREAD_POOL_FOR_AI
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,depth);
-                #else
-                fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,depth,thpoolForAI);
-                #endif
-            }
+            #ifndef THREAD_POOL_FOR_AI
+            fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,depth);
+            #else
+            fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,depth,thpoolForAI);
+            #endif
             #ifdef DEBUG_LOG
             output_log("debugLog","Success:alpha_beta_pruning->fine_great_children(MAX)\n");
             #endif
@@ -415,9 +444,9 @@ void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threa
     TO_CHECK_t greatChildrenGroup[NUM_OF_CHILDREN];
     if(nowGame_t->playerFlag==BLACK_PLAYER){
         #ifndef THREAD_POOL_FOR_AI
-        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1);
+        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,MAX_DEPTH_OF_ALPHA_BETA+1);
         #else
-        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,BLACK_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1,thpoolForAI);
+        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,MAX_DEPTH_OF_ALPHA_BETA+1,thpoolForAI);
         #endif
         for(uint8_t i=0;i<NUM_OF_CHILDREN;i++){
             #ifndef THREAD_POOL_FOR_AI
@@ -434,9 +463,9 @@ void calc_next_input(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threa
         nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
     }else{
         #ifndef THREAD_POOL_FOR_AI
-        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,WHITE_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1);
+        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,MAX_DEPTH_OF_ALPHA_BETA+1);
         #else
-        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,WHITE_PLAYER,MAX_DEPTH_OF_ALPHA_BETA+1,thpoolForAI);
+        fine_great_children(nowGame_t,nowAI_t,greatChildrenGroup,MAX_DEPTH_OF_ALPHA_BETA+1,thpoolForAI);
         #endif
         for(uint8_t i=0;i<NUM_OF_CHILDREN;i++){
             #ifndef THREAD_POOL_FOR_AI
