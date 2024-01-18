@@ -895,8 +895,10 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
 #else
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI){
 #endif
+    uint8_t countChess=0;
     if(nowGame_t->gameMode==PERSON_VS_PERSON){
         while (nowGame_t->gameWinner==CONTINUE){
+            countChess++;
             input_chess_place(nowGame_t);
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
@@ -916,6 +918,9 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
                 printf("WINNER:WHITE\n");
                 return;
+            }else if(countChess==RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD){
+                printf("DRAW\n");
+                return;
             }
             #ifndef ONLY_BLACKPLEAR
             if(nowGame_t->playerFlag==BLACK_PLAYER){
@@ -927,6 +932,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
         }
     }else if(nowGame_t->gameMode==PERSON_VS_COMPUTER){
         while (nowGame_t->gameWinner==CONTINUE){
+            countChess++;
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
@@ -973,6 +979,9 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             }else if(nowGame_t->gameWinner==WHITE_WINE||nowGame_t->gameWinner==FORBIDDEN_HAND){
                 printf("WINNER:WHITE\n");
                 return;
+            }else if(countChess==RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD){
+                printf("DRAW\n");
+                return;
             }
             #ifndef ONLY_BLACKPLEAR
             if(nowGame_t->playerFlag==BLACK_PLAYER){
@@ -984,6 +993,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
         }
     }else if(nowGame_t->gameMode==COMPUTER_VS_PERSON){
         while (nowGame_t->gameWinner==CONTINUE||nowGame_t->gameWinner==FORBIDDEN_HAND){
+            countChess++;
             if(nowGame_t->playerFlag==WHITE_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
@@ -1034,6 +1044,9 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             }else if(nowGame_t->gameWinner==WHITE_WINE){
                 printf("WINNER:WHITE\n");
                 return;
+            }else if(countChess==RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD){
+                printf("DRAW\n");
+                return;
             }
             #ifndef ONLY_BLACKPLEAR
             if(nowGame_t->playerFlag==BLACK_PLAYER){
@@ -1044,6 +1057,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             #endif
         }
     }else if(nowGame_t->gameMode==COMPUTER_VS_COMPUTER){
+        countChess++;
         while (nowGame_t->gameWinner==CONTINUE||nowGame_t->gameWinner==FORBIDDEN_HAND){
             if(nowGame_t->playerFlag==WHITE_PLAYER){
                 static uint8_t firstChessFlag=0;
@@ -1087,6 +1101,9 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                 return;
             }else if(nowGame_t->gameWinner==WHITE_WINE){
                 printf("WINNER:WHITE\n");
+                return;
+            }else if(countChess==RANGE_OF_CHESSBOARD*RANGE_OF_CHESSBOARD){
+                printf("DRAW\n");
                 return;
             }
             #ifndef ONLY_BLACKPLEAR
