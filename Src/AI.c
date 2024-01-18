@@ -10,17 +10,11 @@
 #define MIN_OF_INT32 -2147483648
 #define MAX_OF_INT32 2147483647
 
-#define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-#define NUM_OF_CHILDREN 225 //每一层搜索的子节点数量
+// #define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+// #define NUM_OF_CHILDREN 225 //每一层搜索的子节点数量
 
-// #define MAX_DEPTH_OF_ALPHA_BETA 4 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-// #define NUM_OF_CHILDREN 5 //每一层搜索的子节点数量
-
-// #define MAX_DEPTH_OF_ALPHA_BETA 2 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-// #define NUM_OF_CHILDREN 10 //每一层搜索的子节点数量
-
-// #define MAX_DEPTH_OF_ALPHA_BETA 6 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-// #define NUM_OF_CHILDREN 1 //每一层搜索的子节点数量
+#define MAX_DEPTH_OF_ALPHA_BETA 6 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+#define NUM_OF_CHILDREN 2 //每一层搜索的子节点数量
 
 #define MAX(a,b) a>b?a:b
 #define MIN(a,b) a<b?a:b
@@ -109,7 +103,7 @@ void value_the_game_with_THREAD_POOL_FOR_AI(ONE_GAME_t * const nowGame_t,ONE_AI_
     oneGameAndAI.ans=ans;
     oneGameAndAI.oneAI_t=*nowAI_t;
     oneGameAndAI.oneGame_t=*nowGame_t;
-    #ifdef DEBUG_LOG
+    #ifdef ERROR_LOG
     if(oneGameAndAI.ans!=ans){
         output_log("debugLog","Error:value_the_game_with_THREAD_POOL_FOR_AI ans");
     }
@@ -190,7 +184,7 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
                     greatChildrenGroup[i].row=row;
                     greatChildrenGroup[i].col=col;
                     greatChildrenGroup[i].score=scoreOfChild[MAT(row,col)];
-                    #ifdef DEBUG_LOG  
+                    #ifdef ERROR_LOG  
                         if(row>=RANGE_OF_CHESSBOARD||col>=RANGE_OF_CHESSBOARD){
                             output_log("debugLog","Error:greatChild\n");
                         }
@@ -250,7 +244,7 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
                     greatChildrenGroup[i].row=row;
                     greatChildrenGroup[i].col=col;
                     greatChildrenGroup[i].score=scoreOfChild[MAT(row,col)];
-                    #ifdef DEBUG_LOG  
+                    #ifdef ERROR_LOG  
                         if(row>=RANGE_OF_CHESSBOARD||col>=RANGE_OF_CHESSBOARD){
                             output_log("debugLog","Error:greatChild\n");
                         }

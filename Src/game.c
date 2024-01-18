@@ -39,7 +39,7 @@ void game_init(ONE_GAME_t * const nowGame_t){
             nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
         }
     }
-    #ifdef DEBUG_LOG
+    #ifdef ERROR_LOG
     uint8_t flag=1;
     for(uint8_t row=0;flag==1&&row<RANGE_OF_CHESSBOARD;row++){
         for(uint8_t col=0;flag==1&&col<RANGE_OF_CHESSBOARD;col++){
@@ -98,7 +98,7 @@ void draw_the_start_page(void){
     printf("  \\'. __//                                             '    \\  \\  \\ '   .'|  '/ \n");
     printf("   `'---'                                             '------'  '---'`-'  `--'  \n");
     printf(" Choose game mode:                                                              \n");
-    printf("      A:Person VS Person  B:Person VS Computer  C:Computer VS Person            \n");
+    printf("A:Person VS Person  B:Person VS Computer  C:Computer VS Person  D:Computer VS Computer\n");
 }
 
 /**
@@ -120,6 +120,8 @@ void input_game_mode(ONE_GAME_t * const nowGame_t){
     case 'C':
         nowGame_t->gameMode=COMPUTER_VS_PERSON;
         break;
+    case 'D':
+        nowGame_t->gameMode=COMPUTER_VS_COMPUTER;
     default:
         printf("Please choose the right game mode:\n");
         input_game_mode(nowGame_t);
@@ -892,6 +894,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
 #else
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI){
 #endif
+    static uint8_t firstChessFlag=0;
     if(nowGame_t->gameMode==PERSON_VS_PERSON){
         while (nowGame_t->gameWinner==CONTINUE){
             input_chess_place(nowGame_t);
@@ -927,11 +930,18 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
-                #ifndef THREAD_POOL_FOR_AI
-                calc_next_input(nowGame_t,nowAI_t);
-                #else
-                calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
-                #endif
+                if(firstChessFlag==0){
+                    nowGame_t->whiteInputChessPlace.row=6;
+                    nowGame_t->whiteInputChessPlace.col=6;
+                    nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
+                    firstChessFlag++;
+                }else{
+                    #ifndef THREAD_POOL_FOR_AI
+                    calc_next_input(nowGame_t,nowAI_t);
+                    #else
+                    calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
+                    #endif
+                }
             }
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);
@@ -972,7 +982,6 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             #endif
         }
     }else if(nowGame_t->gameMode==COMPUTER_VS_PERSON){
-        static uint8_t firstChessFlag=0;
         while (nowGame_t->gameWinner==CONTINUE||nowGame_t->gameWinner==FORBIDDEN_HAND){
             if(nowGame_t->playerFlag==WHITE_PLAYER){
                 input_chess_place(nowGame_t);
@@ -1032,13 +1041,56 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             }
             #endif
         }
+    }else if(nowGame_t->gameMode==COMPUTER_VS_COMPUTER){
+        while (nowGame_t->gameWinner==CONTINUE||nowGame_t->gameWinner==FORBIDDEN_HAND){
+            if(nowGame_t->playerFlag==WHITE_PLAYER){
+                if(firstChessFlag==0){
+                    nowGame_t->whiteInputChessPlace.row=6;
+                    nowGame_t->whiteInputChessPlace.col=6;
+                    nowGame_t->whiteInputChessPlace.flag=INPUT_UNUSED;
+                    firstChessFlag++;
+                }else{
+                    #ifndef THREAD_POOL_FOR_AI
+                    calc_next_input(nowGame_t,nowAI_t);
+                    #else
+                    calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
+                    #endif
+                }
+            }else{
+                if(firstChessFlag==0){
+                    nowGame_t->blackInputChessPlace.row=nowGame_t->blackInputChessPlace.col=7;
+                    nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
+                    firstChessFlag++;
+                }else{
+                    #ifndef THREAD_POOL_FOR_AI
+                    calc_next_input(nowGame_t,nowAI_t);
+                    #else
+                    calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
+                    #endif
+                }
+            }
+            place_the_chess(nowGame_t);
+            draw_the_chessboard(nowGame_t);
+            if(nowGame_t->playerFlag==BLACK_PLAYER){
+                printf("AI output:%c%d\n",'A'+nowGame_t->blackInputChessPlace.col,15-nowGame_t->blackInputChessPlace.row);
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
+            }else{
+                nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col,0);
+            }
+            if(nowGame_t->gameWinner==BLACK_WINE){
+                printf("WINNER:BLACK\n");
+                return;
+            }else if(nowGame_t->gameWinner==WHITE_WINE){
+                printf("WINNER:WHITE\n");
+                return;
+            }
+            #ifndef ONLY_BLACKPLEAR
+            if(nowGame_t->playerFlag==BLACK_PLAYER){
+                nowGame_t->playerFlag=WHITE_PLAYER;
+            }else{
+                nowGame_t->playerFlag=BLACK_PLAYER;
+            }
+            #endif
+        }
     }
 }
-
-// /**
-//  * @brief 提供只读的棋盘接口
-// */
-// // const uint8_t * get_state_of_chessboard_point(ONE_GAME_t * const nowGame_t){
-// //     return (const uint8_t *)&nowGame_t->stateOfChessboard;
-// // }A 4 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-// #define NUM_OF_CHILDREN 5 //每一
