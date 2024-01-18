@@ -895,7 +895,6 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
 #else
 void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,threadpool * thpoolForAI){
 #endif
-    static uint8_t firstChessFlag=0;
     if(nowGame_t->gameMode==PERSON_VS_PERSON){
         while (nowGame_t->gameWinner==CONTINUE){
             input_chess_place(nowGame_t);
@@ -931,6 +930,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
+                static uint8_t firstChessFlag=0;
                 if(firstChessFlag==0){
                     nowGame_t->whiteInputChessPlace.row=6;
                     nowGame_t->whiteInputChessPlace.col=6;
@@ -987,6 +987,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             if(nowGame_t->playerFlag==WHITE_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
+                static uint8_t firstChessFlag=0;
                 if(firstChessFlag==0){
                     nowGame_t->blackInputChessPlace.row=nowGame_t->blackInputChessPlace.col=7;
                     nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
@@ -1045,6 +1046,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
     }else if(nowGame_t->gameMode==COMPUTER_VS_COMPUTER){
         while (nowGame_t->gameWinner==CONTINUE||nowGame_t->gameWinner==FORBIDDEN_HAND){
             if(nowGame_t->playerFlag==WHITE_PLAYER){
+                static uint8_t firstChessFlag=0;
                 if(firstChessFlag==0){
                     nowGame_t->whiteInputChessPlace.row=6;
                     nowGame_t->whiteInputChessPlace.col=6;
@@ -1058,6 +1060,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                     #endif
                 }
             }else{
+                static uint8_t firstChessFlag=0;
                 if(firstChessFlag==0){
                     nowGame_t->blackInputChessPlace.row=nowGame_t->blackInputChessPlace.col=7;
                     nowGame_t->blackInputChessPlace.flag=INPUT_UNUSED;
