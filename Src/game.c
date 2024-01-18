@@ -122,6 +122,7 @@ void input_game_mode(ONE_GAME_t * const nowGame_t){
         break;
     case 'D':
         nowGame_t->gameMode=COMPUTER_VS_COMPUTER;
+        break;
     default:
         printf("Please choose the right game mode:\n");
         input_game_mode(nowGame_t);
