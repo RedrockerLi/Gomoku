@@ -1079,7 +1079,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                 printf("AI output:%c%d\n",'A'+nowGame_t->blackInputChessPlace.col,15-nowGame_t->blackInputChessPlace.row);
                 nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastBlackInputChessPlace.row,nowGame_t->lastBlackInputChessPlace.col,0);
             }else{
-                printf("AI output:%c%d\n",'A'+nowGame_t->blackInputChessPlace.col,15-nowGame_t->blackInputChessPlace.row);
+                printf("AI output:%c%d\n",'A'+nowGame_t->whiteInputChessPlace.col,15-nowGame_t->whiteInputChessPlace.row);
                 nowGame_t->gameWinner=call_the_game(nowGame_t,nowGame_t->lastWhiteInputChessPlace.row,nowGame_t->lastWhiteInputChessPlace.col,0);
             }
             if(nowGame_t->gameWinner==BLACK_WINE){
