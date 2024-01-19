@@ -53,7 +53,7 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
                     }
                 }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)]*2;
+                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)]*5;//增加防守的比重
                     }
                 }
             }
@@ -63,7 +63,7 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
             for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
                 if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)]*2;
+                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)]*5;
                     }
                 }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){

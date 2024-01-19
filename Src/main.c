@@ -139,9 +139,9 @@ int main(){
     classAI_t.scoreOfChessStates[FIGHT_THREE_JUMP1]=11812;
     classAI_t.scoreOfChessStates[FAKE_THREE]=11812;
     classAI_t.scoreOfChessStates[LIVE_THREE]=23625;
-    classAI_t.scoreOfChessStates[JUMP_FOUR]=18910;
+    classAI_t.scoreOfChessStates[JUMP_FOUR]=18909;
     classAI_t.scoreOfChessStates[FIGHT_FOUR]=9454;
-    classAI_t.scoreOfChessStates[LIVE_FOUR]=18909;
+    classAI_t.scoreOfChessStates[LIVE_FOUR]=18910;
     classAI_t.scoreOfChessStates[FIVE]=1512073;
     game_init(&classGame_t);
     draw_the_start_page();
