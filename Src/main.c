@@ -141,12 +141,10 @@ int main(){
     classAI_t.scoreOfChessStates[TWO_2B]=325;
     classAI_t.scoreOfChessStates[ZERO_THREE]=0;
     classAI_t.scoreOfChessStates[THREE_JUMP2]=2953;
-    classAI_t.scoreOfChessStates[LIVE_THREE_JUMP1]=31274;
     classAI_t.scoreOfChessStates[FIGHT_THREE_JUMP1]=812;
     classAI_t.scoreOfChessStates[FAKE_THREE]=11812;
     classAI_t.scoreOfChessStates[LIVE_THREE]=302543;
     classAI_t.scoreOfChessStates[ZERO_FOUR]=0;
-    classAI_t.scoreOfChessStates[JUMP_FOUR]=300178;
     classAI_t.scoreOfChessStates[FIGHT_FOUR]=2420356;
     classAI_t.scoreOfChessStates[LIVE_FOUR]=4840712;
     classAI_t.scoreOfChessStates[FIVE]=19362848;
@@ -174,12 +172,10 @@ int main(){
     classAI_t.scoreOfChessStates[TWO_2B]=324;
     classAI_t.scoreOfChessStates[ZERO_THREE]=0;
     classAI_t.scoreOfChessStates[THREE_JUMP2]=2953;
-    classAI_t.scoreOfChessStates[LIVE_THREE_JUMP1]=23626;
     classAI_t.scoreOfChessStates[FIGHT_THREE_JUMP1]=11812;
     classAI_t.scoreOfChessStates[FAKE_THREE]=11812;
     classAI_t.scoreOfChessStates[LIVE_THREE]=23625;
     classAI_t.scoreOfChessStates[ZERO_FOUR]=0;
-    classAI_t.scoreOfChessStates[JUMP_FOUR]=75636;
     classAI_t.scoreOfChessStates[FIGHT_FOUR]=18909;
     classAI_t.scoreOfChessStates[LIVE_FOUR]=28363;
     classAI_t.scoreOfChessStates[FIVE]=453808;

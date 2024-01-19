@@ -756,21 +756,13 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
             samplingResult=(lineToJudge&window)>>((stdPlace-count)*2);
         }
         if(mode==2){
-            if(samplingResult==0b110111010111||samplingResult==0b110101110111){
-                if(stateOfChess<LIVE_THREE_JUMP1){
-                    stateOfChess=LIVE_THREE_JUMP1;
-                }
-            }else if(samplingResult==0b110111010100||samplingResult==0b110101110100||samplingResult==0b000111010111||samplingResult==0b000101110111){
+            if(samplingResult==0b110111010100||samplingResult==0b110101110100||samplingResult==0b000111010111||samplingResult==0b000101110111){
                 if(stateOfChess<FIGHT_THREE_JUMP1){
                     stateOfChess=FIGHT_THREE_JUMP1;
                 }
             }else if(samplingResult==0b000101010100){
                 if(stateOfChess<ZERO_FOUR){
                     stateOfChess=ZERO_FOUR;
-                }
-            }else if(count!=0&&(samplingResult>>2==0b0101011101)||samplingResult>>2==0b0101110101||samplingResult>>2==0b0111010101){
-                if(stateOfChess<JUMP_FOUR){
-                    stateOfChess=JUMP_FOUR;
                 }
             }
         }
@@ -784,7 +776,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                     return FORBIDDEN_HAND;
                 }
             }
-        }else if(samplingResult==0b000101010111||samplingResult==0b110101010100){
+        }else if(samplingResult==0b000101010111||samplingResult==0b110101010100||(count!=0&&(samplingResult>>2==0b0101011101)||samplingResult>>2==0b0101110101||samplingResult>>2==0b0111010101)){
             if(stateOfChess<FIGHT_FOUR){
                 stateOfChess=FIGHT_FOUR;
             }
@@ -841,7 +833,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
 
 /**
  * @brief 判断禁手
- * @param mode 控制模式|0:33+44|1:33+44+长连(无输出)|2:33+44(无输出)
+ * @param mode 控制模式|0:33+44|1:33+44+长连(无输出)|3:33+44(无输出)
 */
 uint8_t judge_forbidden_hand(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col,uint8_t mode){
     uint8_t forbiddenState=FORBIDDEN_HAND-1;

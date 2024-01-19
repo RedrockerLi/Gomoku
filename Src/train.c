@@ -23,11 +23,9 @@ void particles_init(ONE_PARTICLE_t *particles){
         particles[i].nowScores[TWO_1B]=particles[i].nowScores[SINGLE_0B]+rand()%1000;
         particles[i].nowScores[TWO_2B]=particles[i].nowScores[SINGLE_0B]+rand()%1000;
         particles[i].nowScores[THREE_JUMP2]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
-        particles[i].nowScores[LIVE_THREE_JUMP1]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
         particles[i].nowScores[FIGHT_THREE_JUMP1]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
         particles[i].nowScores[FAKE_THREE]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
         particles[i].nowScores[LIVE_THREE]=particles[i].nowScores[TWO_JUMP3]+rand()%10000;
-        particles[i].nowScores[JUMP_FOUR]=particles[i].nowScores[LIVE_THREE]+10*(rand()%100000);
         particles[i].nowScores[FIGHT_FOUR]=particles[i].nowScores[LIVE_THREE]+10*(rand()%100000);
         particles[i].nowScores[LIVE_FOUR]=particles[i].nowScores[LIVE_THREE]+10*(rand()%100000);
         particles[i].nowScores[FIVE]=particles[i].nowScores[LIVE_FOUR]+100*(rand()%1000000);
@@ -67,7 +65,7 @@ uint8_t carry_out_one_game(ONE_AI_VS_AI_t *nowGame_t){
         nowGame_t->thisGame_t.gameWinner=call_the_game(&nowGame_t->thisGame_t,nowGame_t->thisGame_t.lastBlackInputChessPlace.row,nowGame_t->thisGame_t.lastBlackInputChessPlace.col,1);
         if(nowGame_t->thisGame_t.gameWinner==CONTINUE){
             if(nowGame_t->thisGame_t.playerFlag==BLACK_PLAYER){
-                    if(judge_forbidden_hand(&nowGame_t->thisGame_t,nowGame_t->thisGame_t.lastBlackInputChessPlace.row,nowGame_t->thisGame_t.blackInputChessPlace.col,2)==FORBIDDEN_HAND){
+                    if(judge_forbidden_hand(&nowGame_t->thisGame_t,nowGame_t->thisGame_t.lastBlackInputChessPlace.row,nowGame_t->thisGame_t.blackInputChessPlace.col,3)==FORBIDDEN_HAND){
                     nowGame_t->thisGame_t.gameWinner=WHITE_WINE;
                     output_log("trainLog","Err:FORBIDDEN_HAND");
                 }
