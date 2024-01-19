@@ -10,11 +10,11 @@
 #define MIN_OF_INT32 -2147483648
 #define MAX_OF_INT32 2147483647
 
-// #define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-// #define NUM_OF_CHILDREN 225 //每一层搜索的子节点数量
+#define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+#define NUM_OF_CHILDREN 225 //每一层搜索的子节点数量
 
-#define MAX_DEPTH_OF_ALPHA_BETA 6 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-#define NUM_OF_CHILDREN 2 //每一层搜索的子节点数量
+// #define MAX_DEPTH_OF_ALPHA_BETA 6 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+// #define NUM_OF_CHILDREN 2 //每一层搜索的子节点数量
 
 #define MAX(a,b) a>b?a:b
 #define MIN(a,b) a<b?a:b
@@ -127,7 +127,7 @@ int32_t judge_by_winner(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,ui
         if(nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
             nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
         }
-        if((depth+1)%2==0){
+        if(depth%2==0){
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 return MIN_OF_INT32;
             }else{
@@ -144,7 +144,7 @@ int32_t judge_by_winner(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,ui
         if(nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
             nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
         }
-        if((depth+1)%2==0){
+        if(depth%2==0){
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 return MAX_OF_INT32;
             }else{
