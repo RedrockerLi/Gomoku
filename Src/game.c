@@ -252,7 +252,7 @@ void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
         case LAST_WHITE:printf("%s\n",LAST_WHITE_CHESS);nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE; break;
         case AI_BLACK:printf("* \n"); break;
         case AI_WHITE:printf("# \n"); break;
-        default :printf("x ");
+        default :printf("x \n");
     }
     uint8_t i;
     printf("  ");
@@ -733,9 +733,13 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                 if(stateOfChess<TWO_JUMP3){
                     stateOfChess=TWO_JUMP3;
                 }
-            }else if(samplingResult==0b0111010101||samplingResult==0b0111011101||samplingResult==0b0101111101){
+            }else if(samplingResult==0b0111110101||samplingResult==0b0111011101||samplingResult==0b0101111101){
                 if(stateOfChess<THREE_JUMP2){
                     stateOfChess=THREE_JUMP2;
+                }
+            }else if(samplingResult==0b0001010100){
+                if(stateOfChess<ZERO_THREE){
+                    stateOfChess=ZERO_THREE;
                 }
             }else if(samplingResult==0b0101010101){
                 if(stateOfChess<FIVE){
@@ -760,6 +764,14 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                 if(stateOfChess<FIGHT_THREE_JUMP1){
                     stateOfChess=FIGHT_THREE_JUMP1;
                 }
+            }else if(samplingResult==0b000101010100){
+                if(stateOfChess<ZERO_FOUR){
+                    stateOfChess=ZERO_FOUR;
+                }
+            }else if(count!=0&&(samplingResult>>2==0b0101011101)||samplingResult>>2==0b0101110101||samplingResult>>2==0b0111010101){
+                if(stateOfChess<JUMP_FOUR){
+                    stateOfChess=JUMP_FOUR;
+                }
             }
         }
         if(samplingResult==0b110101010111){
@@ -772,7 +784,7 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                     return FORBIDDEN_HAND;
                 }
             }
-        }else if(samplingResult==0b000101010111||samplingResult==0b110101010100||samplingResult==0b011101010100||samplingResult==0b011101010111){
+        }else if(samplingResult==0b000101010111||samplingResult==0b110101010100){
             if(stateOfChess<FIGHT_FOUR){
                 stateOfChess=FIGHT_FOUR;
             }
@@ -781,16 +793,6 @@ uint8_t judge_state_of_chess(ONE_GAME_t * const nowGame_t,const uint8_t row, con
                 if(fourCount==2){
                     return FORBIDDEN_HAND;
                 }   
-            }
-        }else if(count!=0&&(samplingResult>>2==0b0101011101||samplingResult>>2==0b0101110101)){
-            if(stateOfChess<FIGHT_FOUR){
-                stateOfChess=FIGHT_FOUR;
-            }
-            if(mode!=2){
-                fourCount++;
-                if(fourCount==2){
-                    return FORBIDDEN_HAND;
-                }
             }
         }else if(samplingResult==0b110101011111){
             if(judge_forbidden_hand(nowGame_t,row+(5-count)*direction[2*directionChoice],col+(5-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(1-count)*direction[2*directionChoice],col+(1-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND&&judge_forbidden_hand(nowGame_t,row+(0+-count)*direction[2*directionChoice],col+(0-count)*direction[2*directionChoice+1],1)!=FORBIDDEN_HAND){
@@ -936,6 +938,13 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
             if(nowGame_t->playerFlag==BLACK_PLAYER){
                 input_chess_place(nowGame_t);
             }else{
+                #ifdef TEST_TIME
+                    #ifndef THREAD_POOL_FOR_AI
+                    calc_next_input(nowGame_t,nowAI_t);
+                    #else
+                    calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
+                    #endif
+                #else
                 static uint8_t firstChessFlag=0;
                 if(firstChessFlag==0){
                     nowGame_t->whiteInputChessPlace.row=6;
@@ -949,6 +958,7 @@ void continue_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,thr
                     calc_next_input(nowGame_t,nowAI_t,thpoolForAI);
                     #endif
                 }
+                #endif
             }
             place_the_chess(nowGame_t);
             draw_the_chessboard(nowGame_t);

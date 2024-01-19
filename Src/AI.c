@@ -119,6 +119,51 @@ void value_the_game_with_THREAD_POOL_FOR_AI(ONE_GAME_t * const nowGame_t,ONE_AI_
 #endif
 
 /**
+ * @brief 根据胜负返回分数
+*/
+int32_t judge_by_winner(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,uint8_t row,uint8_t col,int8_t depth){
+    uint8_t ansOfCallTheGame=call_the_game(nowGame_t,row,col,1);
+    if(ansOfCallTheGame==BLACK_WINE){
+        if(nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
+            nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
+        }
+        if((depth+1)%2==0){
+            if(nowGame_t->playerFlag==BLACK_PLAYER){
+                return MIN_OF_INT32;
+            }else{
+                return MAX_OF_INT32;
+            }
+        }else{
+            if(nowGame_t->playerFlag==BLACK_PLAYER){
+                return MAX_OF_INT32;
+            }else{
+                return MIN_OF_INT32;
+            }
+        }
+    }else if(ansOfCallTheGame==WHITE_WINE||(nowGame_t->playerFlag==BLACK_PLAYER&&ansOfCallTheGame==FORBIDDEN_HAND)){
+        if(nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
+            nowGame_t->stateOfChessboard[MAT(row,col)]=NONE;
+        }
+        if((depth+1)%2==0){
+            if(nowGame_t->playerFlag==BLACK_PLAYER){
+                return MAX_OF_INT32;
+            }else{
+                return MIN_OF_INT32;
+            }
+        }else{
+            if(nowGame_t->playerFlag==BLACK_PLAYER){
+                return MIN_OF_INT32;
+            }else{
+                return MAX_OF_INT32;
+            }
+        }
+    }else{
+        return CONTINUE;
+    }
+}
+
+
+/**
  * @brief 预先找到比较好的点
 */
 #ifndef THREAD_POOL_FOR_AI
@@ -144,7 +189,13 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
                 if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
                     if(nowGame_t->playerFlag==WHITE_PLAYER){
                         nowGame_t->stateOfChessboard[MAT(row,col)]=AI_BLACK;
-                        if(judge_forbidden_hand(nowGame_t,row,col,1)==FORBIDDEN_HAND){
+                        int32_t ansOfJudgeByWinner;
+                        ansOfJudgeByWinner=judge_by_winner(nowGame_t,nowAI_t,row,col,depth);
+                        if(ansOfJudgeByWinner!=CONTINUE){
+                            scoreOfChild[MAT(row,col)]=ansOfJudgeByWinner;
+                            continue;
+                        }
+                        if(judge_forbidden_hand(nowGame_t,row,col,2)==FORBIDDEN_HAND){
                             scoreOfChild[MAT(row,col)]=MAX_OF_INT32;
                         }else{
                             #ifndef THREAD_POOL_FOR_AI
@@ -155,6 +206,12 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
                         }
                     }else{
                         nowGame_t->stateOfChessboard[MAT(row,col)]=AI_WHITE;
+                        int32_t ansOfJudgeByWinner;
+                        ansOfJudgeByWinner=judge_by_winner(nowGame_t,nowAI_t,row,col,depth);
+                        if(ansOfJudgeByWinner!=CONTINUE){
+                            scoreOfChild[MAT(row,col)]=ansOfJudgeByWinner;
+                            continue;
+                        }
                         #ifndef THREAD_POOL_FOR_AI
                         scoreOfChild[MAT(row,col)]=value_the_game(nowGame_t,nowAI_t);
                         #else
@@ -201,7 +258,13 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
                 if(nowGame_t->stateOfChessboard[MAT(row,col)]==NONE){
                     if(nowGame_t->playerFlag==BLACK_PLAYER){
                         nowGame_t->stateOfChessboard[MAT(row,col)]=AI_BLACK;
-                        if(judge_forbidden_hand(nowGame_t,row,col,1)==FORBIDDEN_HAND){
+                        int32_t ansOfJudgeByWinner;
+                        ansOfJudgeByWinner=judge_by_winner(nowGame_t,nowAI_t,row,col,depth);
+                        if(ansOfJudgeByWinner!=CONTINUE){
+                            scoreOfChild[MAT(row,col)]=ansOfJudgeByWinner;
+                            continue;
+                        }
+                        if(judge_forbidden_hand(nowGame_t,row,col,2)==FORBIDDEN_HAND){
                             scoreOfChild[MAT(row,col)]=MIN_OF_INT32;
                             #ifdef DEBUG_LOG
                             output_log("debugLog","Success:fine_great_children MAX_OR_MIN FORBIDDEN_HAND\n");
@@ -215,6 +278,12 @@ void fine_great_children(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t,T
                         }
                     }else{
                         nowGame_t->stateOfChessboard[MAT(row,col)]=AI_WHITE;
+                        int32_t ansOfJudgeByWinner;
+                        ansOfJudgeByWinner=judge_by_winner(nowGame_t,nowAI_t,row,col,depth);
+                        if(ansOfJudgeByWinner!=CONTINUE){
+                            scoreOfChild[MAT(row,col)]=ansOfJudgeByWinner;
+                            continue;
+                        }
                         #ifndef THREAD_POOL_FOR_AI
                         scoreOfChild[MAT(row,col)]=value_the_game(nowGame_t,nowAI_t);
                         #else
@@ -307,42 +376,6 @@ int32_t alpha_beta_pruning(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t
             nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=AI_BLACK;
         }else{
             nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=AI_WHITE;
-        }
-    }
-    uint8_t ansOfCallTheGame=call_the_game(nowGame_t,addRow,addCol,1);
-    if(ansOfCallTheGame==BLACK_WINE){
-        if(nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_WHITE){
-            nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=NONE;
-        }
-        if((depth+1)%2==0){
-            if(nowGame_t->playerFlag==BLACK){
-                return MIN_OF_INT32;
-            }else{
-                return MAX_OF_INT32;
-            }
-        }else{
-            if(nowGame_t->playerFlag==BLACK){
-                return MAX_OF_INT32;
-            }else{
-                return MIN_OF_INT32;
-            }
-        }
-    }else if(ansOfCallTheGame==WHITE_WINE){
-        if(nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_BLACK||nowGame_t->stateOfChessboard[MAT(addRow,addCol)]==AI_WHITE){
-            nowGame_t->stateOfChessboard[MAT(addRow,addCol)]=NONE;
-        }
-        if((depth+1)%2==0){
-            if(nowGame_t->playerFlag==BLACK){
-                return MAX_OF_INT32;
-            }else{
-                return MIN_OF_INT32;
-            }
-        }else{
-            if(nowGame_t->playerFlag==BLACK){
-                return MIN_OF_INT32;
-            }else{
-                return MAX_OF_INT32;
-            }
         }
     }
     if(depth==-1){

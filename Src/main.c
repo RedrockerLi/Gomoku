@@ -20,6 +20,13 @@
 void set_black(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
     nowGame_t->stateOfChessboard[MAT(row,col)]=BLACK;
 }
+
+/**
+ * @brief 在棋盘放白子
+*/
+void set_white(ONE_GAME_t * const nowGame_t,uint8_t row,uint8_t col){
+    nowGame_t->stateOfChessboard[MAT(row,col)]=WHITE;
+}
 #endif
 /***************************复杂禁手********************************************/
 // set_black(&classGame_t,5,5);
@@ -121,28 +128,28 @@ int main(){
     #ifdef GAME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    // const int32_t scoreChoose[LENGTH_OF_STATES]={0,0,366,0,0,2918,4031,2400,1885,0,41096,95202,3203,0,1736115,2055141,989820,28867934};
-    // const int32_t scoreChoose[LENGTH_OF_STATES]={0,325,801,0,0,0,5911,12976,0,31364,0,22189,0,3550,4156804,1876986,6266044,92611006};
-    // const int32_t scoreChoose[LENGTH_OF_STATES]={24,0,1440,0,0,0,2919,2781,8862,119900,41250,28107,0,0,0,102045,4180884,173766529};
+    // const int32_t scoreChoose[LENGTH_OF_STATES]={}
     // AI_init(&classAI_t,scoreChoose);
     classAI_t.scoreOfChessStates[SINGLE_0B]=0;
     classAI_t.scoreOfChessStates[SINGLE_1B]=5;
     classAI_t.scoreOfChessStates[SINGLE_2B]=41;
     classAI_t.scoreOfChessStates[TWO_JUMP3]=10;
     classAI_t.scoreOfChessStates[TWO_JUMP2]=81;
-    classAI_t.scoreOfChessStates[TWO_JUMP1]=325;
+    classAI_t.scoreOfChessStates[TWO_JUMP1]=150;
     classAI_t.scoreOfChessStates[TWO_0B]=0;
     classAI_t.scoreOfChessStates[TWO_1B]=11;
-    classAI_t.scoreOfChessStates[TWO_2B]=324;
+    classAI_t.scoreOfChessStates[TWO_2B]=325;
+    classAI_t.scoreOfChessStates[ZERO_THREE]=0;
     classAI_t.scoreOfChessStates[THREE_JUMP2]=2953;
-    classAI_t.scoreOfChessStates[LIVE_THREE_JUMP1]=23626;
-    classAI_t.scoreOfChessStates[FIGHT_THREE_JUMP1]=11812;
+    classAI_t.scoreOfChessStates[LIVE_THREE_JUMP1]=31274;
+    classAI_t.scoreOfChessStates[FIGHT_THREE_JUMP1]=812;
     classAI_t.scoreOfChessStates[FAKE_THREE]=11812;
-    classAI_t.scoreOfChessStates[LIVE_THREE]=23625;
-    classAI_t.scoreOfChessStates[JUMP_FOUR]=18909;
-    classAI_t.scoreOfChessStates[FIGHT_FOUR]=9454;
-    classAI_t.scoreOfChessStates[LIVE_FOUR]=18910;
-    classAI_t.scoreOfChessStates[FIVE]=1512073;
+    classAI_t.scoreOfChessStates[LIVE_THREE]=302543;
+    classAI_t.scoreOfChessStates[ZERO_FOUR]=0;
+    classAI_t.scoreOfChessStates[JUMP_FOUR]=300178;
+    classAI_t.scoreOfChessStates[FIGHT_FOUR]=2420356;
+    classAI_t.scoreOfChessStates[LIVE_FOUR]=4840712;
+    classAI_t.scoreOfChessStates[FIVE]=19362848;
     game_init(&classGame_t);
     draw_the_start_page();
     input_game_mode(&classGame_t);
@@ -156,10 +163,34 @@ int main(){
     #ifdef TEST_TIME
     ONE_GAME_t classGame_t;
     ONE_AI_t classAI_t;
-    const int32_t scoreChoose[LENGTH_OF_STATES]={0,10,20,15,20,30,60,100,50,1000,5000,10000,300000,100000,100000,50000000,400000000};
+    classAI_t.scoreOfChessStates[SINGLE_0B]=0;
+    classAI_t.scoreOfChessStates[SINGLE_1B]=5;
+    classAI_t.scoreOfChessStates[SINGLE_2B]=41;
+    classAI_t.scoreOfChessStates[TWO_JUMP3]=10;
+    classAI_t.scoreOfChessStates[TWO_JUMP2]=81;
+    classAI_t.scoreOfChessStates[TWO_JUMP1]=325;
+    classAI_t.scoreOfChessStates[TWO_0B]=0;
+    classAI_t.scoreOfChessStates[TWO_1B]=11;
+    classAI_t.scoreOfChessStates[TWO_2B]=324;
+    classAI_t.scoreOfChessStates[ZERO_THREE]=0;
+    classAI_t.scoreOfChessStates[THREE_JUMP2]=2953;
+    classAI_t.scoreOfChessStates[LIVE_THREE_JUMP1]=23626;
+    classAI_t.scoreOfChessStates[FIGHT_THREE_JUMP1]=11812;
+    classAI_t.scoreOfChessStates[FAKE_THREE]=11812;
+    classAI_t.scoreOfChessStates[LIVE_THREE]=23625;
+    classAI_t.scoreOfChessStates[ZERO_FOUR]=0;
+    classAI_t.scoreOfChessStates[JUMP_FOUR]=75636;
+    classAI_t.scoreOfChessStates[FIGHT_FOUR]=18909;
+    classAI_t.scoreOfChessStates[LIVE_FOUR]=28363;
+    classAI_t.scoreOfChessStates[FIVE]=453808;
     game_init(&classGame_t);
-    AI_init(&classAI_t,scoreChoose);
-    set_black(&classGame_t,5,7);
+    set_black(&classGame_t,1,1);
+    // set_black(&classGame_t,5,6);
+    // set_black(&classGame_t,5,5);
+    // set_black(&classGame_t,5,4);
+    // set_white(&classGame_t,5,3);
+    // set_white(&classGame_t,4,3);
+    // set_white(&classGame_t,3,3);
     classGame_t.gameMode=PERSON_VS_COMPUTER;
     classGame_t.playerFlag=WHITE_PLAYER;
     draw_the_chessboard(&classGame_t);
