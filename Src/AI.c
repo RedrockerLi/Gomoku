@@ -10,11 +10,11 @@
 #define MIN_OF_INT32 -2147483648
 #define MAX_OF_INT32 2147483647
 
-#define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-#define NUM_OF_CHILDREN 225 //每一层搜索的子节点数量
+// #define MAX_DEPTH_OF_ALPHA_BETA 0 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+// #define NUM_OF_CHILDREN 225 //每一层搜索的子节点数量
 
-// #define MAX_DEPTH_OF_ALPHA_BETA 6 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
-// #define NUM_OF_CHILDREN 2 //每一层搜索的子节点数量
+#define MAX_DEPTH_OF_ALPHA_BETA 6 //事实上是在博弈树的第二层(MIN)层往下搜索的层数
+#define NUM_OF_CHILDREN 2 //每一层搜索的子节点数量
 
 #define MAX(a,b) a>b?a:b
 #define MIN(a,b) a<b?a:b
@@ -44,16 +44,29 @@ void AI_init(ONE_AI_t *nowAI_t,const int32_t scoreChoose[]){
 */
 int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
     int64_t valueOfAll=0;
+    int32_t tempScore;
+    uint8_t counter;
     if(nowGame_t->playerFlag==BLACK_PLAYER){
         for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
             for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+                counter=1;
                 if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                        valueOfAll+=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)];
+                        tempScore=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)];
+                        if(tempScore>=nowAI_t->scoreOfChessStates[LIVE_THREE]){
+                            valueOfAll+=tempScore*counter;
+                        }else{
+                            valueOfAll+=tempScore;
+                        }
                     }
                 }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)]*5;//增加防守的比重
+                        tempScore=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)];
+                        if(tempScore>=nowAI_t->scoreOfChessStates[LIVE_THREE]){
+                            valueOfAll-=tempScore*counter*10;
+                        }else{
+                            valueOfAll-=tempScore*10;
+                        }
                     }
                 }
             }
@@ -61,13 +74,24 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
     }else{
         for(uint8_t row=0;row<RANGE_OF_CHESSBOARD;row++){
             for(uint8_t col=0;col<RANGE_OF_CHESSBOARD;col++){
+                counter=1;
                 if(nowGame_t->stateOfChessboard[MAT(row,col)]==BLACK||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_BLACK){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                        valueOfAll-=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)]*5;
+                        tempScore=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)];
+                        if(tempScore>=nowAI_t->scoreOfChessStates[LIVE_THREE]){
+                            valueOfAll-=tempScore*counter*10;
+                        }else{
+                            valueOfAll-=tempScore*10;
+                        }
                     }
                 }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
-                        valueOfAll+=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)];
+                        tempScore=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)];
+                        if(tempScore>=nowAI_t->scoreOfChessStates[LIVE_THREE]){
+                            valueOfAll+=tempScore*counter;
+                        }else{
+                            valueOfAll+=tempScore;
+                        }
                     }
                 }
             }
