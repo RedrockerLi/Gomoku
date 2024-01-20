@@ -3,6 +3,10 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <time.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "game.h"
 #include "AI.h"
@@ -82,7 +86,21 @@ void game_init(ONE_GAME_t * const nowGame_t){
 */
 void draw_the_start_page(void){
     #ifdef CLEAR
-    system("clear");
+    while(-1==system("clear"));
+    #endif
+    #ifdef SHOW_INPUT
+    #define BUFF 1024
+    uint8_t fileBuf[BUFF];
+    uint16_t size;
+    int file;
+    if((file=open("input",O_RDONLY))==-1){
+        printf("Error.Cannot find file input\n");
+        exit(1);
+    }
+    size=read(file,fileBuf,BUFF);
+    fileBuf[size]='\0';
+    close(file);
+    printf("%s\n",fileBuf);
     #endif
     printf("             .-'''-.                        .-'''-.                             \n");
     printf("            '   _    \\                     '   _    \\                           \n");
@@ -135,7 +153,7 @@ void input_game_mode(ONE_GAME_t * const nowGame_t){
 */
 void draw_the_chessboard(ONE_GAME_t * const nowGame_t){
     #ifdef CLEAR
-    system("clear");
+    while(-1==system("clear"));
     #endif
     uint8_t row,col;
     //第一行

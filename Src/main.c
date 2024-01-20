@@ -1,9 +1,5 @@
 #include <stdio.h>
 #include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <unistd.h>
 #include <time.h>
 #include <stdlib.h>
 
@@ -99,20 +95,6 @@ char* int_to_string(int num){
 #endif
 
 int main(){
-    #ifdef SHOW_INPUT
-    #define BUFF 1024
-    uint8_t fileBuf[BUFF];
-    uint16_t size;
-    int file;
-    if((file=open("input",O_RDONLY))==-1){
-        printf("Error.Cannot find file input\n");
-        return 1;
-    }
-    size=read(file,fileBuf,BUFF);
-    fileBuf[size]='\0';
-    close(file);
-    printf("%s",fileBuf);
-    #endif
     #ifdef DEBUG_LOG
     log_init("debugLog");
     time_t currentTime;

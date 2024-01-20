@@ -63,9 +63,9 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
                         tempScore=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,WHITE,directionChoice,2)];
                         if(tempScore>=nowAI_t->scoreOfChessStates[LIVE_THREE]){
-                            valueOfAll-=tempScore*counter*20;
+                            valueOfAll-=tempScore*counter*30;
                         }else{
-                            valueOfAll-=tempScore*20;
+                            valueOfAll-=tempScore*30;
                         }
                     }
                 }
@@ -79,9 +79,9 @@ int32_t value_the_game(ONE_GAME_t * const nowGame_t,ONE_AI_t * const nowAI_t){
                     for(uint8_t directionChoice=0;directionChoice<4;directionChoice++){
                         tempScore=nowAI_t->scoreOfChessStates[judge_state_of_chess(nowGame_t,row,col,BLACK,directionChoice,2)];
                         if(tempScore>=nowAI_t->scoreOfChessStates[LIVE_THREE]){
-                            valueOfAll-=tempScore*counter*20;
+                            valueOfAll-=tempScore*counter*30;
                         }else{
-                            valueOfAll-=tempScore*20;
+                            valueOfAll-=tempScore*30;
                         }
                     }
                 }else if(nowGame_t->stateOfChessboard[MAT(row,col)]==WHITE||nowGame_t->stateOfChessboard[MAT(row,col)]==AI_WHITE){
