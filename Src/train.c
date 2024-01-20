@@ -1,3 +1,4 @@
+#ifdef TRAIN
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
@@ -171,3 +172,4 @@ void refresh_progress(const ONE_PARTICLE_t * const particles,const int32_t * con
         }
     }
 }
+#endif
