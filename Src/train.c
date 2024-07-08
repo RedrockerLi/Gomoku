@@ -1,4 +1,3 @@
-#ifdef TRAIN
 #include <stdint.h>
 #include <stdlib.h>
 #include <time.h>
@@ -7,6 +6,7 @@
 #include "AI.h"
 #include "game.h"
 #include  "train.h"
+#ifdef TRAIN
 
 /**
  * @brief 初始化

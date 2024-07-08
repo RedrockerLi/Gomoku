@@ -2,6 +2,8 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 
 #include "AI.h"
 #include "game.h"
